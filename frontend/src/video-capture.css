@@ -1,0 +1,221 @@
+.video-capture-form {
+  padding-top: 2px;
+}
+
+.video-dropzone {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  border: 1px dashed #94acbb;
+  border-radius: 8px;
+  background: var(--low);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color .18s, background .18s;
+}
+
+.video-dropzone:hover,
+.video-dropzone:focus-within,
+.video-dropzone.dragging {
+  border-color: var(--cyan);
+  background: var(--high);
+}
+
+.video-dropzone.dragging {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--cyan) 22%, transparent);
+}
+
+.video-dropzone > svg {
+  width: 42px;
+  height: 42px;
+  color: var(--blue);
+  stroke-width: 1.6;
+}
+
+.video-dropzone strong {
+  font-size: 17px;
+}
+
+.video-dropzone small,
+.video-extraction-note {
+  color: var(--muted);
+}
+
+.video-source-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-top: 1px solid var(--outline);
+  border-bottom: 1px solid var(--outline);
+}
+
+.video-source-row > svg {
+  width: 23px;
+  color: var(--blue);
+}
+
+.video-source-row strong,
+.video-source-row small {
+  display: block;
+}
+
+.video-source-row strong {
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.video-source-row small {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.video-preview-meta {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.video-preview-meta span {
+  padding: 16px 12px;
+}
+
+.video-text-layout {
+  height: clamp(300px, 40vh, 430px);
+  display: grid;
+  grid-template-columns: minmax(220px, .8fr) minmax(0, 1.2fr);
+  border-top: 1px solid var(--outline);
+  border-bottom: 1px solid var(--outline);
+}
+
+.video-text-layout figure {
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 16px 18px 16px 0;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--outline);
+  background: var(--low);
+}
+
+.video-text-layout video,
+.material-video-preview video {
+  width: 100%;
+  max-height: 100%;
+  display: block;
+  background: #050607;
+  object-fit: contain;
+}
+
+.video-text-layout > label {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 48px minmax(0, 1fr);
+  padding-left: 18px;
+}
+
+.video-text-layout > label > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.video-text-layout > label > span svg {
+  width: 18px;
+  color: var(--cyan);
+}
+
+.video-text-layout > label > span small {
+  margin-left: auto;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.video-text-layout textarea {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 13px;
+  resize: none;
+  border: 1px solid var(--outline);
+  border-radius: 6px;
+  outline: 0;
+  background: var(--low);
+  color: var(--text);
+  line-height: 1.75;
+}
+
+.video-text-layout textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 14%, transparent);
+}
+
+.video-extraction-note {
+  margin: 12px 0 0;
+  font-size: 12px;
+}
+
+.material-video-preview {
+  min-height: 180px;
+  max-height: 460px;
+  margin-bottom: 18px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-top: 1px solid var(--outline);
+  border-bottom: 1px solid var(--outline);
+  background: var(--low);
+}
+
+.material-video-preview video {
+  max-height: 460px;
+}
+
+.material-video-preview .url-spinner {
+  width: 42px;
+  height: 42px;
+}
+
+@media (max-width: 640px) {
+  .video-dropzone {
+    min-height: 250px;
+  }
+
+  .video-preview-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .video-preview-meta span:nth-child(2) {
+    border-right: 0;
+  }
+
+  .video-preview-meta span:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--outline);
+  }
+
+  .video-text-layout {
+    height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .video-text-layout figure {
+    height: 230px;
+    padding: 14px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--outline);
+  }
+
+  .video-text-layout > label {
+    height: 300px;
+    padding: 0;
+  }
+}

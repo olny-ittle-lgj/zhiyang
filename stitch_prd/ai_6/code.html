@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>登录 | ZhiYan AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .glass-card {
+            background: rgba(44, 49, 58, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glow-on-hover:hover {
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
+        }
+
+        body {
+            background-color: #0B0C0E;
+            color: #e2e2e6;
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0C0E;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2C313A;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00F5FF;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#e2e2e6",
+                        "mint-evolution": "#A2FFD6",
+                        "surface-container-high": "#282a2d",
+                        "primary-fixed-dim": "#a2c9ff",
+                        "on-primary-fixed": "#001c38",
+                        "slate-gray": "#2C313A",
+                        "electric-blue": "#00F5FF",
+                        "on-tertiary-fixed-variant": "#00513a",
+                        "secondary": "#e6feff",
+                        "surface-variant": "#333538",
+                        "primary-container": "#409eff",
+                        "on-primary-container": "#003460",
+                        "on-secondary-fixed": "#002021",
+                        "tertiary-container": "#50ac88",
+                        "surface-container-highest": "#333538",
+                        "error-container": "#93000a",
+                        "outline-variant": "#404752",
+                        "surface-container-lowest": "#0c0e11",
+                        "on-primary": "#00315b",
+                        "surface-container": "#1e2023",
+                        "on-primary-fixed-variant": "#004881",
+                        "on-tertiary-fixed": "#002115",
+                        "tertiary-fixed": "#98f5cc",
+                        "tertiary": "#7cd8b1",
+                        "inverse-primary": "#0060a9",
+                        "on-surface-variant": "#c0c7d4",
+                        "secondary-container": "#00f4fe",
+                        "surface-dim": "#111316",
+                        "on-secondary": "#003739",
+                        "on-background": "#e2e2e6",
+                        "outline": "#8a919e",
+                        "on-error": "#690005",
+                        "error-red": "#F56C6C",
+                        "on-tertiary-container": "#003b29",
+                        "secondary-fixed": "#63f7ff",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#00dce5",
+                        "surface-tint": "#a2c9ff",
+                        "deep-charcoal": "#0B0C0E",
+                        "primary-fixed": "#d3e4ff",
+                        "surface": "#111316",
+                        "warning-amber": "#E6A23C",
+                        "surface-bright": "#37393d",
+                        "on-secondary-fixed-variant": "#004f53",
+                        "tertiary-fixed-dim": "#7cd8b1",
+                        "on-secondary-container": "#006c71",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#2f3034",
+                        "on-tertiary": "#003827",
+                        "background": "#111316",
+                        "surface-container-low": "#1a1c1f",
+                        "on-surface": "#e2e2e6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-md": "32px",
+                        "margin-lg": "64px",
+                        "margin-sm": "16px",
+                        "container-max": "1440px",
+                        "unit": "8px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "label-md": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["30px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-deep-charcoal/60 backdrop-blur-xl border-b border-outline-variant/20 shadow-none transition-all duration-300 ease-in-out">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-lg h-20">
+<div class="font-headline-md text-headline-md font-bold text-on-surface tracking-tighter">
+                ZhiYan AI
+            </div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:text-electric-blue transition-colors" href="#">Evolution</a>
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:text-electric-blue transition-colors" href="#">Workspace</a>
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:text-electric-blue transition-colors" href="#">Lab</a>
+</div>
+<div class="flex items-center">
+<button class="bg-electric-blue text-deep-charcoal font-bold px-6 py-2 rounded-lg hover:bg-mint-evolution transition-all">Sign In</button>
+</div>
+</div>
+</nav>
+<!-- Main Content: Login Shell -->
+<main class="flex-grow flex items-center justify-center relative overflow-hidden pt-20">
+<!-- Background Animation -->
+
+<!-- Decorative subtle glow -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-electric-blue/5 rounded-full blur-[120px] pointer-events-none"></div>
+<!-- Login Card -->
+<div class="relative z-10 w-full max-w-md px-4 py-margin-lg">
+<div class="glass-card rounded-xl p-10 flex flex-col items-center">
+<div class="mb-8 text-center">
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">欢迎回来</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">登录以继续您的知识演化</p>
+</div>
+<form class="w-full space-y-6">
+<!-- Username/Email Field -->
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-outline px-1">账号/邮箱</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-electric-blue transition-colors">mail</span>
+<input class="w-full bg-deep-charcoal border border-outline-variant/50 focus:border-electric-blue focus:ring-0 text-on-surface font-body-md rounded-lg py-3 pl-12 pr-4 transition-all outline-none" placeholder="name@example.com" type="text"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<label class="font-label-md text-label-md text-outline">密码</label>
+<a class="font-label-sm text-label-sm text-electric-blue hover:text-mint-evolution transition-colors" href="#">忘记密码？</a>
+</div>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-electric-blue transition-colors">lock</span>
+<input class="w-full bg-deep-charcoal border border-outline-variant/50 focus:border-electric-blue focus:ring-0 text-on-surface font-body-md rounded-lg py-3 pl-12 pr-12 transition-all outline-none" placeholder="••••••••" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Primary Login Button -->
+<button class="w-full bg-electric-blue text-deep-charcoal font-bold py-4 rounded-lg text-headline-md glow-on-hover hover:bg-mint-evolution transition-all transform active:scale-[0.98] mt-4" type="submit">
+                        登录
+                    </button>
+</form>
+<div class="mt-8 text-center">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        还没有账号？ <a class="text-electric-blue font-bold hover:underline" href="#">立即注册</a>
+</p>
+</div>
+<!-- Third Party Login -->
+<div class="w-full mt-10">
+<div class="flex items-center w-full mb-6">
+<div class="flex-grow h-px bg-outline-variant/30"></div>
+<span class="mx-4 font-label-sm text-label-sm text-outline uppercase tracking-widest">其他登录方式</span>
+<div class="flex-grow h-px bg-outline-variant/30"></div>
+</div>
+<div class="flex justify-center gap-6">
+<!-- WeChat icon represented by a custom button with material symbol -->
+<button class="w-12 h-12 rounded-full border border-outline-variant/50 flex items-center justify-center hover:border-electric-blue hover:bg-surface-variant/30 transition-all group" title="微信登录">
+<span class="material-symbols-outlined text-outline group-hover:text-electric-blue" style="font-variation-settings: 'FILL' 1;">chat</span>
+</button>
+<!-- Mobile/SMS icon -->
+<button class="w-12 h-12 rounded-full border border-outline-variant/50 flex items-center justify-center hover:border-electric-blue hover:bg-surface-variant/30 transition-all group" title="手机验证码登录">
+<span class="material-symbols-outlined text-outline group-hover:text-electric-blue">phone_iphone</span>
+</button>
+<!-- Other icon for demo -->
+<button class="w-12 h-12 rounded-full border border-outline-variant/50 flex items-center justify-center hover:border-electric-blue hover:bg-surface-variant/30 transition-all group" title="更多方式">
+<span class="material-symbols-outlined text-outline group-hover:text-electric-blue">more_horiz</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-margin-md bg-deep-charcoal border-t border-outline-variant/10 shadow-none">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-lg max-w-container-max mx-auto space-y-4 md:space-y-0">
+<div class="font-headline-md text-headline-md text-on-surface opacity-80 hover:opacity-100 transition-opacity">
+                ZhiYan AI
+            </div>
+<div class="text-center md:text-left">
+<p class="font-label-md text-label-md text-outline">© 2024 ZhiYan AI. Knowledge Evolved.</p>
+</div>
+<div class="flex space-x-6">
+<a class="font-label-md text-label-md text-outline hover:text-mint-evolution transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-md text-label-md text-outline hover:text-mint-evolution transition-colors" href="#">Terms of Service</a>
+<a class="font-label-md text-label-md text-outline hover:text-mint-evolution transition-colors" href="#">API Docs</a>
+</div>
+</div>
+</footer>
+<!-- Simple interaction script for input focus -->
+<script>
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.classList.add('ring-1', 'ring-electric-blue/30');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.classList.remove('ring-1', 'ring-electric-blue/30');
+            });
+        });
+
+        // Toggle password visibility placeholder logic
+        const togglePass = document.querySelector('button span[data-icon="visibility"]');
+        if(togglePass) {
+            togglePass.addEventListener('click', function() {
+                const input = this.closest('.relative').querySelector('input');
+                if(input.type === 'password') {
+                    input.type = 'text';
+                    this.textContent = 'visibility_off';
+                } else {
+                    input.type = 'password';
+                    this.textContent = 'visibility';
+                }
+            });
+        }
+    </script>
+</body></html>

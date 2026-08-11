@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知言 | AI 知识工作台</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-card {
+            background: rgba(26, 28, 31, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .ai-glow {
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.15);
+        }
+        .active-glow {
+            filter: drop-shadow(0 0 8px #00F5FF);
+        }
+        body {
+            background-color: #0B0C0E;
+            color: #e2e2e6;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary": "#a2c9ff",
+                      "surface-container-low": "#1a1c1f",
+                      "surface": "#111316",
+                      "background": "#111316",
+                      "deep-charcoal": "#0B0C0E",
+                      "surface-variant": "#333538",
+                      "outline": "#8a919e",
+                      "mint-evolution": "#A2FFD6",
+                      "electric-blue": "#00F5FF",
+                      "on-surface": "#e2e2e6",
+                      "on-surface-variant": "#c0c7d4",
+                      "outline-variant": "#404752",
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1440px",
+                      "margin-md": "32px",
+                      "margin-lg": "64px",
+                      "unit": "8px",
+                      "margin-sm": "16px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "label-sm": ["JetBrains Mono"],
+                      "label-md": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="flex min-h-screen overflow-x-hidden">
+<!-- SideNavBar Anchor -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant flex flex-col py-8 px-4 z-50">
+<div class="flex items-center gap-3 mb-10 px-2">
+<img alt="知言 Logo" class="w-10 h-10 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVVJ77L-DVMfHqtzTz-clGrqUkEKitjSk-TcswUBHLUdUNNeoTkSCrPju8VQ1vZ4vPKA87A7YrT2V0_FyXtxeSBd4WtAsBMx5dhB1lA2jeU6K60J0ZBN9LrJL9gK_1VM06nipZPDcZt6HqTbudp46pjvQYEgrSDXFYb9NZC3hfPNC8GX0dRSRmYLIIaDp96ZpomrmpnjSfW08wpPWdfYw8n67pFRkOrOCyDD4t0NyA-FyqJiI41tfy-csjQxlmvo6fag8CmqK5gqCa"/>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">知言</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">AI 进化中心</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-electric-blue font-bold border-r-4 border-electric-blue bg-surface-variant/30 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md">控制台</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span class="font-label-md">知识库</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-label-md">进化中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="sports_esports">sports_esports</span>
+<span class="font-label-md">游戏中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="font-label-md">图谱分析</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md">设置</span>
+</a>
+</nav>
+<button class="mt-auto bg-primary text-on-primary-container font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span class="font-label-md">新建知识</span>
+</button>
+</aside>
+<main class="flex-1 ml-64 min-w-0">
+<!-- TopAppBar Anchor -->
+<header class="sticky top-0 z-40 w-full h-16 bg-surface/60 backdrop-blur-xl border-b border-outline-variant flex items-center justify-between px-margin-lg">
+<div class="flex-1 max-w-xl">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full bg-deep-charcoal border border-outline-variant rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-electric-blue transition-colors" placeholder="搜索知识..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue cursor-pointer transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue cursor-pointer transition-colors" data-icon="military_tech">military_tech</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue cursor-pointer transition-colors" data-icon="star">star</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue cursor-pointer transition-colors" data-icon="monetization_on">monetization_on</span>
+</div>
+<div class="flex items-center gap-3 border-l border-outline-variant pl-6">
+<div class="text-right">
+<p class="text-sm font-bold text-on-surface">Alex Chen</p>
+<p class="text-[10px] text-mint-evolution font-label-sm uppercase tracking-wider">Level 4 进化者</p>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-electric-blue p-0.5 overflow-hidden">
+<img alt="Alex Chen" class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZPSLuOsojFV7wLLSLlNqXNOq8Ya-YgDx5ypVrPSLDWgdoFY57Xy9cxeA0sDJq-WTN7qmfU9gwGvlxj3qk8e_zqwAaQLNCW809_wf9RC4yVwL2To4cvebvFBq4KzMTCKnc7esCqx2eSz_bL3yYRN2s7ySTK0l_vMSxvh_A3-I8sXweFo03MoNssBU3TP1MM9lqPGve7kLf13bNGIorrSa9Ysef6RsExA2YWiW8Qodam-PHjHe7f2ZG9gRw3Jv-RYwGVix7_5RVy6oZ"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-margin-lg space-y-gutter">
+<!-- Stats Bar -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="glass-card p-6 rounded-xl border border-outline-variant">
+<p class="text-on-surface-variant font-label-md mb-2">知识总量</p>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-headline-md text-on-surface">12,842</span>
+<span class="text-mint-evolution text-xs font-label-sm mb-1">+12%</span>
+</div>
+<div class="w-full bg-surface-variant h-1 mt-4 rounded-full overflow-hidden">
+<div class="bg-electric-blue h-full" style="width: 75%"></div>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl border border-outline-variant">
+<p class="text-on-surface-variant font-label-md mb-2">今日新增</p>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-headline-md text-on-surface">148</span>
+<span class="text-primary text-xs font-label-sm mb-1">实体</span>
+</div>
+<div class="mt-4 flex gap-1">
+<div class="h-2 flex-1 bg-electric-blue/40 rounded-full"></div>
+<div class="h-2 flex-1 bg-electric-blue/20 rounded-full"></div>
+<div class="h-2 flex-1 bg-electric-blue rounded-full"></div>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl border border-outline-variant flex items-center justify-between">
+<div>
+<p class="text-on-surface-variant font-label-md mb-2">分类占比</p>
+<ul class="text-xs space-y-1">
+<li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-electric-blue"></span> 科技 (45%)</li>
+<li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-mint-evolution"></span> 艺术 (30%)</li>
+</ul>
+</div>
+<div class="relative w-16 h-16">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<circle class="text-surface-variant" cx="18" cy="18" fill="none" r="16" stroke="currentColor" stroke-width="3"></circle>
+<circle class="text-electric-blue" cx="18" cy="18" fill="none" r="16" stroke="currentColor" stroke-dasharray="75 100" stroke-width="3"></circle>
+</svg>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl border border-outline-variant">
+<p class="text-on-surface-variant font-label-md mb-2">平均掌握度</p>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-headline-md text-on-surface">88.4%</span>
+<span class="material-symbols-outlined text-mint-evolution" data-icon="trending_up">trending_up</span>
+</div>
+<p class="text-[10px] text-on-surface-variant mt-3 font-label-sm italic">排名前 5% 的进化者</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Evolution Status & Trend -->
+<div class="lg:col-span-2 space-y-gutter">
+<!-- Evolution Card -->
+<div class="glass-card p-8 rounded-xl relative overflow-hidden ai-glow">
+<div class="absolute top-0 right-0 p-4">
+<span class="flex items-center gap-2 px-3 py-1 bg-mint-evolution/10 text-mint-evolution rounded-full text-xs font-label-sm border border-mint-evolution/20">
+<span class="w-1.5 h-1.5 rounded-full bg-mint-evolution animate-pulse"></span>
+                            已完成
+                        </span>
+</div>
+<div class="flex flex-col md:flex-row gap-8 items-center">
+<div class="w-32 h-32 relative">
+<div class="absolute inset-0 rounded-full border-4 border-electric-blue/10"></div>
+<div class="absolute inset-0 rounded-full border-4 border-t-electric-blue animate-[spin_3s_linear_infinite]"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-electric-blue" data-icon="psychology">psychology</span>
+</div>
+</div>
+<div class="flex-1">
+<h2 class="text-xl font-bold mb-2">最新自动进化周期</h2>
+<p class="text-on-surface-variant text-sm mb-4 leading-relaxed">系统成功优化了“量子物理”集群中的 1.2k 个节点。冲突解决完成度达 98%，并发现了 12 个新的跨领域桥接点。</p>
+<div class="flex gap-4">
+<button class="px-6 py-2 bg-surface-variant hover:bg-outline-variant rounded-lg text-sm font-semibold transition-all">审核变更</button>
+<button class="px-6 py-2 bg-transparent border border-electric-blue text-electric-blue hover:bg-electric-blue/10 rounded-lg text-sm font-semibold transition-all">导出报告</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Learning Trend -->
+<div class="glass-card p-8 rounded-xl">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-bold">学习趋势</h3>
+<div class="flex gap-4 text-xs font-label-sm">
+<div class="flex items-center gap-2"><span class="w-3 h-0.5 bg-electric-blue"></span> 答题量</div>
+<div class="flex items-center gap-2"><span class="w-3 h-0.5 bg-mint-evolution"></span> 准确率</div>
+</div>
+</div>
+<div class="h-64 w-full relative flex items-end justify-between px-2">
+<svg class="absolute inset-0 w-full h-full overflow-visible">
+<path d="M0,150 Q50,120 100,140 T200,80 T300,100 T400,40 T500,60 T600,30" fill="none" stroke="#00F5FF" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+<path d="M0,160 Q50,150 100,130 T200,110 T300,90 T400,70 T500,50 T600,40" fill="none" stroke="#A2FFD6" stroke-dasharray="4 4" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+</svg>
+<div class="relative z-10 w-full flex justify-between pt-48">
+<span class="text-[10px] text-on-surface-variant">周一</span>
+<span class="text-[10px] text-on-surface-variant">周二</span>
+<span class="text-[10px] text-on-surface-variant">周三</span>
+<span class="text-[10px] text-on-surface-variant">周四</span>
+<span class="text-[10px] text-on-surface-variant">周五</span>
+<span class="text-[10px] text-on-surface-variant">周六</span>
+<span class="text-[10px] text-on-surface-variant">周日</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Profile & Recent Activities -->
+<div class="space-y-gutter">
+<!-- Quick Actions -->
+<div class="grid grid-cols-2 gap-4">
+<button class="flex flex-col items-center justify-center gap-3 p-6 glass-card rounded-xl hover:bg-surface-variant transition-all active:scale-95 group">
+<span class="material-symbols-outlined text-3xl text-electric-blue group-hover:scale-110 transition-transform" data-icon="upload_file">upload_file</span>
+<span class="text-xs font-bold uppercase tracking-wider">上传</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-3 p-6 glass-card rounded-xl hover:bg-surface-variant transition-all active:scale-95 group">
+<span class="material-symbols-outlined text-3xl text-mint-evolution group-hover:scale-110 transition-transform" data-icon="bolt">bolt</span>
+<span class="text-xs font-bold uppercase tracking-wider">进化</span>
+</button>
+</div>
+<!-- User Profile Preview -->
+<div class="glass-card p-6 rounded-xl border border-outline-variant">
+<div class="flex flex-col items-center text-center mb-6">
+<div class="relative mb-4">
+<div class="w-20 h-20 rounded-full border-2 border-electric-blue p-1">
+<img alt="Alex Chen Profile" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAe-Y8FPArbkK6kIubx2Ezxv1NAwv4UpboDiRSdlOOf0OXdyBK4gK775IQSg8zyJXz-3cufyTe5Y542WzfK7I_Yh5NJFJSrYlMsOXGwUsl--URj5CoPlhq4l0i6_wJ3vKiNuFMe3DEq98jE4PEbt0zKIxbgBzmcLYB-Qyv5ryI84lBkmtkYzG21-zdOvE14oVIxebrt7ow78U1aqCIrXjWclXNgrDdO2s46xFFKaQ1k6FBegxE8BgRjiW_t6rxK9XvmHm4sv8uBL_Ox"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-electric-blue text-deep-charcoal rounded-full p-1 border-2 border-deep-charcoal">
+<span class="material-symbols-outlined text-xs fill-icon" data-icon="verified">verified</span>
+</div>
+</div>
+<h3 class="font-bold">Alex Chen</h3>
+<p class="text-xs text-on-surface-variant font-label-sm">知识架构师</p>
+</div>
+<div class="space-y-4">
+<p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-widest border-b border-outline-variant pb-2">成就勋章</p>
+<div class="flex flex-wrap gap-3 justify-center">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-electric-blue hover:shadow-[0_0_10px_rgba(0,245,255,0.3)] cursor-pointer" title="早期采用者">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-mint-evolution hover:shadow-[0_0_10px_rgba(162,255,214,0.3)] cursor-pointer" title="数据大师">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-primary hover:shadow-[0_0_10px_rgba(162,201,255,0.3)] cursor-pointer" title="快速学习者">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-on-surface-variant hover:shadow-[0_0_10px_rgba(255,255,255,0.1)] cursor-pointer" title="协作者">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activities -->
+<div class="glass-card p-6 rounded-xl border border-outline-variant">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-bold">最近动态</h3>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer text-sm" data-icon="more_horiz">more_horiz</span>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-8 h-8 rounded bg-electric-blue/10 flex items-center justify-center text-electric-blue flex-shrink-0">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface group-hover:text-electric-blue transition-colors">量子力学_V3.pdf</p>
+<p class="text-[10px] text-on-surface-variant">已处理 • 2分钟前</p>
+</div>
+</div>
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-8 h-8 rounded bg-mint-evolution/10 flex items-center justify-center text-mint-evolution flex-shrink-0">
+<span class="material-symbols-outlined text-sm" data-icon="language">language</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface group-hover:text-mint-evolution transition-colors">Arxiv: 2402.00192 (链接)</p>
+<p class="text-[10px] text-on-surface-variant">已分析 • 45分钟前</p>
+</div>
+</div>
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">Python 脚本: Vectorizer.py</p>
+<p class="text-[10px] text-on-surface-variant">已提取 • 2小时前</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-2 text-xs font-label-md text-on-surface-variant hover:text-on-surface border border-dashed border-outline-variant rounded-lg transition-colors">
+                        查看全部动态
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Anchor -->
+<footer class="w-full bg-deep-charcoal p-8 mt-12 border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-lg">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-4 md:mb-0">知言进化系统 v2.4</p>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm text-mint-evolution hover:text-on-surface transition-opacity" href="#">RAGFlow: 在线</a>
+<a class="font-label-sm text-label-sm text-mint-evolution hover:text-on-surface transition-opacity" href="#">Milvus: 活跃</a>
+<a class="font-label-sm text-label-sm text-mint-evolution hover:text-on-surface transition-opacity" href="#">RabbitMQ: 稳定</a>
+</div>
+</div>
+</footer>
+</main>
+<script>
+    // Micro-interactions for glass cards
+    document.querySelectorAll('.glass-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+</script>
+</body></html>

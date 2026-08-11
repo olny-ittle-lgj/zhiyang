@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知衍 AI - 系统设置</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed": "#d3e4ff",
+                      "on-error": "#690005",
+                      "on-tertiary-container": "#003b29",
+                      "on-secondary-fixed-variant": "#004f53",
+                      "inverse-primary": "#0060a9",
+                      "tertiary-container": "#50ac88",
+                      "on-background": "#e2e2e6",
+                      "surface-container-lowest": "#0c0e11",
+                      "on-primary": "#00315b",
+                      "on-tertiary-fixed-variant": "#00513a",
+                      "tertiary-fixed": "#98f5cc",
+                      "slate-gray": "#2C313A",
+                      "on-secondary-fixed": "#002021",
+                      "on-tertiary": "#003827",
+                      "surface": "#111316",
+                      "outline-variant": "#404752",
+                      "on-primary-fixed": "#001c38",
+                      "error": "#ffb4ab",
+                      "error-red": "#F56C6C",
+                      "surface-tint": "#a2c9ff",
+                      "secondary-container": "#00f4fe",
+                      "background": "#111316",
+                      "secondary-fixed": "#63f7ff",
+                      "surface-bright": "#37393d",
+                      "warning-amber": "#E6A23C",
+                      "on-tertiary-fixed": "#002115",
+                      "error-container": "#93000a",
+                      "surface-container": "#1e2023",
+                      "inverse-on-surface": "#2f3034",
+                      "surface-container-low": "#1a1c1f",
+                      "surface-variant": "#333538",
+                      "on-secondary-container": "#006c71",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary": "#003739",
+                      "primary-fixed-dim": "#a2c9ff",
+                      "tertiary": "#7cd8b1",
+                      "on-primary-fixed-variant": "#004881",
+                      "tertiary-fixed-dim": "#7cd8b1",
+                      "primary-container": "#409eff",
+                      "outline": "#8a919e",
+                      "on-surface": "#e2e2e6",
+                      "surface-dim": "#111316",
+                      "electric-blue": "#00F5FF",
+                      "deep-charcoal": "#0B0C0E",
+                      "on-surface-variant": "#c0c7d4",
+                      "mint-evolution": "#A2FFD6",
+                      "inverse-surface": "#e2e2e6",
+                      "on-primary-container": "#003460",
+                      "secondary-fixed-dim": "#00dce5",
+                      "surface-container-high": "#282a2d",
+                      "surface-container-highest": "#333538",
+                      "secondary": "#e6feff",
+                      "primary": "#a2c9ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1440px",
+                      "gutter": "24px",
+                      "margin-sm": "16px",
+                      "margin-md": "32px",
+                      "margin-lg": "64px",
+                      "unit": "8px"
+              },
+              "fontFamily": {
+                      "body-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "label-sm": ["JetBrains Mono"],
+                      "body-lg": ["Inter"],
+                      "label-md": ["JetBrains Mono"],
+                      "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["30px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "headline-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(44, 49, 58, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .ai-glow-focus:focus-within {
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.3);
+            border-color: #00F5FF;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #00F5FF;
+        }
+        .toggle-checkbox:checked + .toggle-label .toggle-dot {
+            transform: translateX(100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant flex flex-col py-margin-md px-margin-sm z-50">
+<div class="mb-10 px-4">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary">知衍</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">AI 工作坊</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-electric-blue">dashboard</span>
+<span class="font-label-md text-label-md">控制台</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-electric-blue">database</span>
+<span class="font-label-md text-label-md">知识库</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-electric-blue">psychology</span>
+<span class="font-label-md text-label-md">进化中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-electric-blue">sports_esports</span>
+<span class="font-label-md text-label-md">游戏中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-electric-blue">hub</span>
+<span class="font-label-md text-label-md">图谱分析</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-electric-blue font-bold border-r-4 border-electric-blue bg-surface-variant/30" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">系统设置</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<button class="w-full bg-electric-blue text-deep-charcoal font-bold py-3 rounded-lg scale-95 active:scale-90 transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-md text-label-md">新建知识</span>
+</button>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-lg h-16 ml-64 max-w-[calc(100%-16rem)] sticky top-0 z-40 bg-surface/60 dark:bg-surface/60 backdrop-blur-xl border-b border-outline-variant">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md group ai-glow-focus rounded-lg transition-all">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-2 text-on-surface focus:outline-none placeholder:text-on-surface-variant font-body-md" placeholder="搜索系统设置..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue cursor-pointer transition-colors" title="通知">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue cursor-pointer transition-colors" title="成就">military_tech</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue cursor-pointer transition-colors" title="收藏">star</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue cursor-pointer transition-colors" title="钱包">monetization_on</span>
+</div>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeOn3-Pp9POAbwNvZFcWsDXNnLYmJ-tNdemY10cPINd43g6Gf_tc2hhLdrUbpm1V6pQOjiHxmnst3odBLGQvmOi3A4COb54Zo20VZRxaBjTs8wsAPHWgpeOwwLsMdvWtofSYGyEMNDberLkRfv5_hFElPD7n1PhKwEQ5TmjAmTgBToset_E0gP2dZTgJACDvxGWQ32CPgDuT-U0Vu_SX9WtQlNCKhawEK6hyuXOqxnX7adkiGr-AGqPe6mBYHTVLxKZgRw4ylTyr2B"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-margin-lg max-w-screen-xl">
+<div class="mb-12">
+<h2 class="font-headline-lg text-headline-lg mb-2">系统设置</h2>
+<p class="text-on-surface-variant font-body-lg">配置您的个人 AI 实验室与工作坊环境。</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Primary Settings -->
+<div class="lg:col-span-8 space-y-gutter">
+<!-- Evolution Settings Section -->
+<section class="glass-card rounded-xl p-margin-md">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-electric-blue" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<h3 class="font-headline-md text-headline-md">进化设置</h3>
+</div>
+<div class="space-y-8">
+<!-- Auto Evolution Toggle -->
+<div class="flex items-center justify-between group">
+<div>
+<h4 class="font-body-lg font-semibold text-on-surface">自动进化</h4>
+<p class="font-label-md text-on-surface-variant">允许 AI 在后台优化您的知识图谱。</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer toggle-checkbox" type="checkbox" value=""/>
+<div class="w-12 h-6 bg-slate-gray rounded-full peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-electric-blue"></div>
+</label>
+</div>
+<!-- Trigger Time -->
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-end">
+<div>
+<h4 class="font-body-lg font-semibold text-on-surface">触发计划</h4>
+<p class="font-label-md text-on-surface-variant">系统级同步与推理周期。</p>
+</div>
+<span class="font-label-md text-electric-blue">02:00 AM (每日)</span>
+</div>
+<div class="w-full bg-slate-gray h-2 rounded-full overflow-hidden">
+<div class="bg-electric-blue h-full w-[15%]" style="box-shadow: 0 0 10px #00F5FF;"></div>
+</div>
+<div class="flex justify-between text-[10px] font-label-sm text-on-surface-variant uppercase tracking-widest">
+<span>00:00</span>
+<span>06:00</span>
+<span>12:00</span>
+<span>18:00</span>
+<span>24:00</span>
+</div>
+</div>
+<!-- Default Mode Selector -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<button class="p-4 rounded-lg border border-electric-blue bg-electric-blue/5 text-left transition-all hover:bg-electric-blue/10">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-electric-blue">bolt</span>
+<div class="w-4 h-4 rounded-full border-2 border-electric-blue flex items-center justify-center">
+<div class="w-2 h-2 bg-electric-blue rounded-full"></div>
+</div>
+</div>
+<p class="font-label-md text-on-surface font-bold">快速推理</p>
+<p class="text-[12px] text-on-surface-variant leading-tight">针对速度进行优化。使用参数较小的 LLM 模型。</p>
+</button>
+<button class="p-4 rounded-lg border border-outline-variant bg-transparent text-left transition-all hover:border-on-surface-variant">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-on-surface-variant">precision_manufacturing</span>
+<div class="w-4 h-4 rounded-full border-2 border-outline-variant"></div>
+</div>
+<p class="font-label-md text-on-surface font-bold">深度逻辑</p>
+<p class="text-[12px] text-on-surface-variant leading-tight">复杂的、多步骤思维链推理。</p>
+</button>
+</div>
+</div>
+</section>
+<!-- Game Preferences Section -->
+<section class="glass-card rounded-xl p-margin-md">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-electric-blue">sports_esports</span>
+<h3 class="font-headline-md text-headline-md">游戏偏好</h3>
+</div>
+<div class="space-y-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-on-surface-variant">知识大富翁难度</label>
+<select class="bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-electric-blue font-body-md ai-glow-focus appearance-none">
+<option>等级 1：学徒 (入门)</option>
+<option selected="">等级 3：专家 (推荐)</option>
+<option>等级 5：大师 (进阶)</option>
+</select>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg border border-outline-variant/30">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-mint-evolution">extension</span>
+<div>
+<p class="font-label-md font-bold">游戏化复习</p>
+<p class="text-[12px] text-on-surface-variant">根据每日笔记自动生成游戏</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer toggle-checkbox" type="checkbox" value=""/>
+<div class="w-12 h-6 bg-slate-gray rounded-full peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-mint-evolution"></div>
+</label>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Secondary Settings & Links -->
+<div class="lg:col-span-4 space-y-gutter">
+<!-- Account & Binding Section -->
+<section class="glass-card rounded-xl p-margin-md">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-electric-blue">account_circle</span>
+<h3 class="font-headline-md text-headline-md">安全</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-400">chat</span>
+<span class="font-label-md">微信</span>
+</div>
+<span class="text-[12px] text-on-surface-variant font-label-md">已绑定：Zhi***n</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">phone_iphone</span>
+<span class="font-label-md">手机</span>
+</div>
+<button class="text-[12px] text-electric-blue hover:underline font-label-md">立即绑定</button>
+</div>
+<div class="pt-4 mt-4 border-t border-outline-variant">
+<button class="w-full flex items-center justify-between text-on-surface-variant hover:text-on-surface transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined">share</span>
+<span class="font-label-md">分享管理</span>
+</div>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- System Info Card -->
+<section class="bg-gradient-to-br from-surface-container to-deep-charcoal rounded-xl p-margin-md border border-outline-variant">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="font-label-sm text-mint-evolution uppercase tracking-tighter">系统状态</p>
+<h4 class="font-headline-md text-on-surface">v2.4 稳定版</h4>
+</div>
+<div class="w-8 h-8 rounded-lg bg-mint-evolution/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-mint-evolution animate-pulse">sensors</span>
+</div>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-[12px] font-label-sm">
+<span class="text-on-surface-variant">内存占用</span>
+<span class="text-on-surface">4.2 GB</span>
+</div>
+<div class="w-full bg-slate-gray h-1 rounded-full">
+<div class="bg-mint-evolution h-full w-[42%]"></div>
+</div>
+<div class="flex justify-between text-[12px] font-label-sm">
+<span class="text-on-surface-variant">运行时间</span>
+<span class="text-on-surface">14天 2时 11分</span>
+</div>
+</div>
+<button class="w-full py-2 border border-mint-evolution/30 text-mint-evolution rounded-lg font-label-md hover:bg-mint-evolution/10 transition-colors">
+                        检查更新
+                    </button>
+</section>
+<!-- Danger Zone -->
+<section class="p-margin-md rounded-xl border border-error/20 bg-error-container/5">
+<h4 class="font-label-md text-error-red font-bold mb-4">危险区域</h4>
+<button class="w-full text-left py-2 px-3 rounded-lg hover:bg-error-container/20 transition-colors flex items-center gap-3 group">
+<span class="material-symbols-outlined text-error-red text-[18px]">delete_forever</span>
+<span class="font-label-md text-on-surface-variant group-hover:text-error-red">清空数据中心</span>
+</button>
+<button class="w-full text-left py-2 px-3 rounded-lg hover:bg-surface-variant transition-colors flex items-center gap-3 group mt-1">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">logout</span>
+<span class="font-label-md text-on-surface-variant group-hover:text-on-surface">停用工作坊</span>
+</button>
+</section>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full ml-64 p-4 border-t border-outline-variant bg-deep-charcoal dark:bg-deep-charcoal flex justify-between items-center max-w-[calc(100%-16rem)] px-margin-lg">
+<p class="font-label-sm text-label-sm text-on-surface-variant">知衍进化系统 v2.4</p>
+<div class="flex gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-opacity" href="#">RAGFlow: 联机</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-opacity" href="#">Milvus: 活跃</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-opacity" href="#">RabbitMQ: 稳定</a>
+</div>
+</footer>
+<script>
+        // Micro-interactions for selection boxes
+        document.querySelectorAll('button[class*="border"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const sibling = this.parentElement.querySelectorAll('button');
+                sibling.forEach(s => {
+                    s.classList.remove('border-electric-blue', 'bg-electric-blue/5');
+                    s.classList.add('border-outline-variant', 'bg-transparent');
+                    const dot = s.querySelector('.w-4 .bg-electric-blue');
+                    if (dot) dot.parentElement.classList.remove('border-electric-blue');
+                    if (dot) dot.remove();
+                });
+                
+                this.classList.add('border-electric-blue', 'bg-electric-blue/5');
+                this.classList.remove('border-outline-variant', 'bg-transparent');
+                
+                const indicator = this.querySelector('.w-4');
+                indicator.classList.add('border-electric-blue');
+                indicator.innerHTML = '<div class="w-2 h-2 bg-electric-blue rounded-full"></div>';
+            });
+        });
+    </script>
+</body></html>

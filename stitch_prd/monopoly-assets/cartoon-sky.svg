@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#1297f4"/>
+      <stop offset=".44" stop-color="#52caf8"/>
+      <stop offset=".72" stop-color="#baf0ff"/>
+      <stop offset="1" stop-color="#76c94f"/>
+    </linearGradient>
+    <linearGradient id="hill" x1="0" x2="1">
+      <stop offset="0" stop-color="#7db75e"/>
+      <stop offset=".52" stop-color="#95ca77"/>
+      <stop offset="1" stop-color="#65a84b"/>
+    </linearGradient>
+    <filter id="soft">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <path d="M0 585 C160 495 280 545 430 504 C610 455 730 560 920 520 C1110 480 1230 420 1600 520 L1600 900 L0 900 Z" fill="#6fb46b"/>
+  <path d="M0 635 C190 540 320 615 500 578 C720 532 840 650 1050 602 C1260 554 1420 552 1600 610 L1600 900 L0 900 Z" fill="url(#hill)"/>
+  <path d="M0 720 C280 650 470 740 760 672 C1010 612 1250 710 1600 648 L1600 900 L0 900 Z" fill="#52a947"/>
+  <ellipse cx="1120" cy="640" rx="330" ry="54" fill="#3c9f48" opacity=".35" filter="url(#soft)"/>
+  <ellipse cx="510" cy="705" rx="460" ry="72" fill="#3b9f4d" opacity=".26" filter="url(#soft)"/>
+  <g fill="#fff" opacity=".92">
+    <circle cx="110" cy="92" r="78"/>
+    <circle cx="178" cy="72" r="62"/>
+    <circle cx="244" cy="108" r="80"/>
+    <circle cx="315" cy="70" r="55"/>
+    <circle cx="382" cy="106" r="74"/>
+    <rect x="78" y="112" width="342" height="84" rx="42"/>
+  </g>
+  <g fill="#fff" opacity=".9">
+    <circle cx="1220" cy="118" r="42"/>
+    <circle cx="1264" cy="94" r="58"/>
+    <circle cx="1328" cy="118" r="46"/>
+    <rect x="1190" y="126" width="180" height="48" rx="24"/>
+  </g>
+  <path d="M796 236 C708 138 566 176 560 304 C554 434 746 526 804 614 C862 526 1054 434 1048 304 C1042 176 900 138 812 236 Z" fill="none" stroke="#fff" stroke-width="42" stroke-linecap="round" stroke-linejoin="round" opacity=".88"/>
+</svg>

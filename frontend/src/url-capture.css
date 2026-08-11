@@ -1,0 +1,333 @@
+.url-capture-form {
+  padding-top: 2px;
+}
+
+.url-form-grid,
+.url-preview-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, .55fr);
+  gap: 16px;
+}
+
+.url-preview-fields {
+  margin: 20px 0;
+}
+
+.url-preview-fields label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.url-preview-fields input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--outline);
+  border-radius: 6px;
+  outline: 0;
+  background: var(--low);
+  color: var(--text);
+}
+
+.url-preview-fields input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 14%, transparent);
+}
+
+.url-fetch-state {
+  min-height: 390px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.url-fetch-state > div:first-of-type h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.url-fetch-state > div:first-of-type p {
+  max-width: 520px;
+  margin: 0;
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.url-spinner {
+  width: 62px;
+  height: 62px;
+  color: var(--cyan);
+  stroke-width: 1.5;
+  animation: url-spin .9s linear infinite;
+}
+
+.url-fetch-progress {
+  width: min(440px, 100%);
+  margin-top: 12px;
+  border-top: 1px solid var(--outline);
+}
+
+.url-fetch-progress span {
+  min-height: 46px;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--outline);
+  color: var(--muted);
+  text-align: left;
+  font-size: 13px;
+}
+
+.url-fetch-progress svg {
+  width: 18px;
+  height: 18px;
+}
+
+.url-fetch-progress .done {
+  color: var(--mint);
+}
+
+.url-fetch-progress .active {
+  color: var(--cyan);
+  font-weight: 700;
+}
+
+.url-fetch-progress .active svg {
+  animation: url-spin .9s linear infinite;
+}
+
+.url-preview {
+  min-width: 0;
+}
+
+.url-source-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-top: 1px solid var(--outline);
+  border-bottom: 1px solid var(--outline);
+}
+
+.url-source-row > svg {
+  width: 22px;
+  color: var(--blue);
+}
+
+.url-source-row span,
+.url-source-row strong,
+.url-source-row small {
+  min-width: 0;
+  display: block;
+}
+
+.url-source-row strong {
+  margin-bottom: 4px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.url-source-row small {
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.url-source-row a {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  color: var(--blue);
+}
+
+.url-source-row a:hover {
+  background: var(--high);
+}
+
+.url-source-row a svg {
+  width: 18px;
+}
+
+.url-source-row.compact {
+  margin-bottom: 16px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.url-preview-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--outline);
+}
+
+.url-preview-meta span {
+  min-width: 0;
+  padding: 16px 18px;
+  border-right: 1px solid var(--outline);
+}
+
+.url-preview-meta span:first-child {
+  padding-left: 0;
+}
+
+.url-preview-meta span:last-child {
+  border-right: 0;
+}
+
+.url-preview-meta strong,
+.url-preview-meta small {
+  display: block;
+}
+
+.url-preview-meta strong {
+  overflow: hidden;
+  color: var(--mint);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.url-preview-meta span:nth-child(2) strong {
+  color: var(--blue);
+}
+
+.url-preview-meta span:nth-child(3) strong {
+  color: var(--amber);
+}
+
+.url-preview-meta small {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.url-preview-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 0;
+}
+
+.url-preview-heading span {
+  flex: none;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.url-preview-heading b {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.url-preview-body {
+  height: clamp(240px, 36vh, 390px);
+  margin-top: 0;
+  padding: 4px 10px 18px 0;
+  overflow: auto;
+  border-top: 1px solid var(--outline);
+  border-bottom: 1px solid var(--outline);
+}
+
+.url-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.url-error-state {
+  min-height: 330px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.url-error-state > svg {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 18px;
+  color: var(--red);
+  stroke-width: 1.6;
+}
+
+.url-error-state h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.url-error-state p {
+  max-width: 560px;
+  margin: 0;
+  color: var(--red);
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.material-detail-preview > span {
+  display: block;
+  margin-bottom: 10px;
+}
+
+@keyframes url-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .url-spinner,
+  .url-fetch-progress .active svg { animation-duration: 2s; }
+}
+
+@media (max-width: 640px) {
+  .url-form-grid,
+  .url-preview-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .url-fetch-state {
+    min-height: 340px;
+  }
+
+  .url-preview-meta span {
+    padding: 14px 9px;
+  }
+
+  .url-preview-meta span:first-child {
+    padding-left: 0;
+  }
+
+  .url-preview-meta strong {
+    font-size: 13px;
+  }
+
+  .url-preview-heading {
+    display: grid;
+    gap: 7px;
+  }
+
+  .url-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .url-actions .button {
+    width: 100%;
+  }
+}

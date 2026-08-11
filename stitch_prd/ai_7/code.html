@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知衍 AI - 图谱分析</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#d3e4ff",
+                    "on-error": "#690005",
+                    "on-tertiary-container": "#003b29",
+                    "on-secondary-fixed-variant": "#004f53",
+                    "inverse-primary": "#0060a9",
+                    "tertiary-container": "#50ac88",
+                    "on-background": "#e2e2e6",
+                    "surface-container-lowest": "#0c0e11",
+                    "on-primary": "#00315b",
+                    "on-tertiary-fixed-variant": "#00513a",
+                    "tertiary-fixed": "#98f5cc",
+                    "slate-gray": "#2C313A",
+                    "on-secondary-fixed": "#002021",
+                    "on-tertiary": "#003827",
+                    "surface": "#111316",
+                    "outline-variant": "#404752",
+                    "on-primary-fixed": "#001c38",
+                    "error": "#ffb4ab",
+                    "error-red": "#F56C6C",
+                    "surface-tint": "#a2c9ff",
+                    "secondary-container": "#00f4fe",
+                    "background": "#111316",
+                    "secondary-fixed": "#63f7ff",
+                    "surface-bright": "#37393d",
+                    "warning-amber": "#E6A23C",
+                    "on-tertiary-fixed": "#002115",
+                    "error-container": "#93000a",
+                    "surface-container": "#1e2023",
+                    "inverse-on-surface": "#2f3034",
+                    "surface-container-low": "#1a1c1f",
+                    "surface-variant": "#333538",
+                    "on-secondary-container": "#006c71",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary": "#003739",
+                    "primary-fixed-dim": "#a2c9ff",
+                    "tertiary": "#7cd8b1",
+                    "on-primary-fixed-variant": "#004881",
+                    "tertiary-fixed-dim": "#7cd8b1",
+                    "primary-container": "#409eff",
+                    "outline": "#8a919e",
+                    "on-surface": "#e2e2e6",
+                    "surface-dim": "#111316",
+                    "electric-blue": "#00F5FF",
+                    "deep-charcoal": "#0B0C0E",
+                    "on-surface-variant": "#c0c7d4",
+                    "mint-evolution": "#A2FFD6",
+                    "inverse-surface": "#e2e2e6",
+                    "on-primary-container": "#003460",
+                    "secondary-fixed-dim": "#00dce5",
+                    "surface-container-high": "#282a2d",
+                    "surface-container-highest": "#333538",
+                    "secondary": "#e6feff",
+                    "primary": "#a2c9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1440px",
+                    "gutter": "24px",
+                    "margin-sm": "16px",
+                    "margin-md": "32px",
+                    "margin-lg": "64px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-sm": ["JetBrains Mono"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["JetBrains Mono"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["30px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "headline-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(30, 32, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glow-blue {
+            filter: drop-shadow(0 0 8px rgba(0, 245, 255, 0.5));
+        }
+        .graph-bg {
+            background: radial-gradient(circle at center, #1a1c1f 0%, #0b0c0e 100%);
+        }
+        @keyframes pulse-node {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .node-active {
+            animation: pulse-node 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-electric-blue selection:text-deep-charcoal overflow-hidden h-screen">
+<!-- SideNavBar (Shared Component) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant flex flex-col py-margin-md px-margin-sm z-50">
+<div class="mb-10 px-4">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary tracking-tight">知衍</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">AI 工作坊</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-electric-blue">dashboard</span>
+<span class="font-label-md text-label-md">控制台</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-electric-blue">database</span>
+<span class="font-label-md text-label-md">知识库</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-electric-blue">psychology</span>
+<span class="font-label-md text-label-md">进化中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-electric-blue">sports_esports</span>
+<span class="font-label-md text-label-md">游戏中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-electric-blue font-bold border-r-4 border-electric-blue bg-surface-variant/30" href="#">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-label-md text-label-md">图谱分析</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-electric-blue">settings</span>
+<span class="font-label-md text-label-md">设置</span>
+</a>
+</nav>
+<button class="mt-auto bg-primary-container text-on-primary-container py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-md text-label-md">新增知识</span>
+</button>
+</aside>
+<!-- Main Workspace -->
+<main class="ml-64 flex flex-col h-screen">
+<!-- TopAppBar (Shared Component) -->
+<header class="flex justify-between items-center w-full px-margin-lg h-16 sticky top-0 z-40 bg-surface/60 dark:bg-surface/60 backdrop-blur-xl border-b border-outline-variant">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-96 max-w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-electric-blue focus:ring-1 focus:ring-electric-blue transition-all" placeholder="搜索知识节点..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-electric-blue transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-electric-blue rounded-full"></span>
+</button>
+<button class="hover:text-electric-blue transition-colors">
+<span class="material-symbols-outlined">military_tech</span>
+</button>
+<button class="hover:text-electric-blue transition-colors">
+<span class="material-symbols-outlined">star</span>
+</button>
+<button class="hover:text-electric-blue transition-colors">
+<span class="material-symbols-outlined">monetization_on</span>
+</button>
+</div>
+<div class="h-8 w-px bg-outline-variant mx-2"></div>
+<img alt="用户头像" class="h-10 w-10 rounded-full border border-electric-blue/30 object-cover cursor-pointer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRWmmGjmeb8rEv0XQz4kNixvq5dS2sagD5FgfOAcD_-rJHJ0_fR8v0rQjWNT1ZkFjVLTphGSrlOaAQDThHNB2WzyXDHTWwrYqXADqq4FtLmyWLpCcNBWmwCgTO2frbL9p2M7SL6PPZ8QNuXCKzU33BpLWu5tOdRfNpqjmPf07ydmjhyqThVFkIsIzlhfca22g0BnRW7FfpiJAlPEYIzLCVDP9gvoSN5oLZkF31-aV1kCVlghiv5S54Lhis0-u4R8DHR8BYlh2nE_ds"/>
+</div>
+</header>
+<!-- Graph Visualization Area -->
+<div class="relative flex-1 graph-bg overflow-hidden flex">
+<!-- Force-Directed Graph Container -->
+<div class="flex-1 relative cursor-grab active:cursor-grabbing overflow-hidden" id="graph-canvas">
+<!-- Simulation of an interactive graph with static elements for visual quality -->
+<svg class="absolute inset-0" height="100%" width="100%">
+<defs>
+<filter id="glow">
+<fegaussianblur result="coloredBlur" stddeviation="2.5"></fegaussianblur>
+<femerge>
+<femergenode in="coloredBlur"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+</defs>
+<!-- Connections -->
+<g class="opacity-30 stroke-electric-blue stroke-[0.5]">
+<line x1="20%" x2="45%" y1="30%" y2="50%"></line>
+<line x1="45%" x2="70%" y1="50%" y2="40%"></line>
+<line x1="45%" x2="30%" y1="50%" y2="75%"></line>
+<line x1="70%" x2="85%" y1="40%" y2="60%"></line>
+<line x1="30%" x2="60%" y1="75%" y2="85%"></line>
+<line x1="20%" x2="10%" y1="30%" y2="50%"></line>
+</g>
+<!-- Nodes -->
+<circle class="node-active" cx="20%" cy="30%" fill="#00F5FF" filter="url(#glow)" r="8"></circle>
+<circle cx="45%" cy="50%" fill="#00F5FF" filter="url(#glow)" r="12"></circle>
+<circle cx="70%" cy="40%" fill="#00F5FF" filter="url(#glow)" r="10"></circle>
+<circle cx="30%" cy="75%" fill="#A2FFD6" filter="url(#glow)" r="6"></circle>
+<circle cx="85%" cy="60%" fill="#00F5FF" filter="url(#glow)" r="5"></circle>
+<circle cx="60%" cy="85%" fill="#A2FFD6" filter="url(#glow)" r="7"></circle>
+<circle cx="10%" cy="50%" fill="#00F5FF" filter="url(#glow)" r="6"></circle>
+</svg>
+<!-- Floating Labels -->
+<div class="absolute top-[28%] left-[22%] font-label-sm text-xs text-electric-blue opacity-80">量子纠缠</div>
+<div class="absolute top-[48%] left-[47%] font-label-md text-sm text-electric-blue font-bold">核心_AI_启发式</div>
+<div class="absolute top-[38%] left-[72%] font-label-sm text-xs text-on-surface-variant">神经路径</div>
+<div class="absolute top-[73%] left-[32%] font-label-sm text-xs text-mint-evolution">已掌握集群</div>
+</div>
+<!-- Side Panel (Node Details) -->
+<aside class="w-[400px] h-full glass-panel border-l border-outline-variant flex flex-col animate-in slide-in-from-right duration-500">
+<div class="p-margin-md flex-1 overflow-y-auto custom-scrollbar">
+<div class="flex justify-between items-start mb-6">
+<div>
+<span class="inline-block px-2 py-0.5 rounded bg-primary/10 text-primary font-label-sm text-[10px] uppercase tracking-widest mb-2 border border-primary/20">活动节点</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">神经架构 v4</h2>
+</div>
+<button class="p-2 rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Summary Card -->
+<section class="space-y-4 mb-8">
+<div class="flex items-center gap-2 text-on-surface-variant border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-sm">subject</span>
+<h3 class="font-label-md text-label-md">摘要</h3>
+</div>
+<p class="text-on-surface-variant font-body-md leading-relaxed">
+                            一个专为高保真推理设计的复杂多层神经结构。该节点代表了知衍生态系统中空间感知算法的基础演进。
+                        </p>
+</section>
+<!-- Related Docs (Bento Style) -->
+<section class="space-y-4 mb-8">
+<div class="flex items-center gap-2 text-on-surface-variant border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-sm">description</span>
+<h3 class="font-label-md text-label-md">关联文档</h3>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<div class="glass-panel p-4 rounded-xl hover:border-electric-blue transition-all cursor-pointer group">
+<div class="flex justify-between items-center mb-1">
+<span class="text-xs text-primary font-label-sm">PDF 报告</span>
+<span class="material-symbols-outlined text-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+<h4 class="text-on-surface font-body-md font-medium">进化偏见分析</h4>
+</div>
+<div class="glass-panel p-4 rounded-xl hover:border-electric-blue transition-all cursor-pointer group">
+<div class="flex justify-between items-center mb-1">
+<span class="text-xs text-mint-evolution font-label-sm">原始数据</span>
+<span class="material-symbols-outlined text-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+<h4 class="text-on-surface font-body-md font-medium">启发式模式日志</h4>
+</div>
+</div>
+</section>
+<!-- Mastery Section -->
+<section class="space-y-4">
+<div class="flex items-center gap-2 text-on-surface-variant border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-sm">auto_graph</span>
+<h3 class="font-label-md text-label-md">掌握进度</h3>
+</div>
+<div class="bg-surface-container-high rounded-2xl p-6 relative overflow-hidden">
+<div class="flex justify-between items-end mb-4">
+<div class="text-4xl font-bold text-electric-blue">84<span class="text-xl">%</span></div>
+<div class="text-on-surface-variant font-label-sm mb-1 uppercase">稳定进化</div>
+</div>
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden">
+<div class="bg-electric-blue h-full w-[84%] glow-blue transition-all duration-1000"></div>
+</div>
+<!-- Background Subtle Animation Overlay -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="h-full w-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-electric-blue to-transparent"></div>
+</div>
+</div>
+</section>
+</div>
+<!-- Detail Actions -->
+<div class="p-margin-md border-t border-outline-variant bg-surface-container-low">
+<button class="w-full bg-electric-blue text-deep-charcoal font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined">rocket_launch</span>
+                        进化节点
+                    </button>
+</div>
+</aside>
+<!-- Graph Toolbars -->
+<!-- Filter Toolbar (Top Left) -->
+<div class="absolute top-6 left-6 flex gap-2">
+<div class="glass-panel rounded-full px-4 py-2 flex items-center gap-4">
+<div class="flex items-center gap-2 border-r border-outline-variant pr-4">
+<span class="material-symbols-outlined text-electric-blue">filter_alt</span>
+<span class="font-label-sm text-xs uppercase tracking-tight text-on-surface">筛选</span>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded-full bg-surface-variant text-on-surface font-label-sm text-xs hover:bg-electric-blue hover:text-deep-charcoal transition-all">逻辑</button>
+<button class="px-3 py-1 rounded-full bg-surface-variant text-on-surface font-label-sm text-xs hover:bg-electric-blue hover:text-deep-charcoal transition-all">创意</button>
+<button class="px-3 py-1 rounded-full bg-surface-variant text-on-surface font-label-sm text-xs hover:bg-electric-blue hover:text-deep-charcoal transition-all">记忆</button>
+</div>
+</div>
+</div>
+<!-- View Mode Switcher (Bottom Left) -->
+<div class="absolute bottom-6 left-6">
+<div class="glass-panel rounded-xl p-1 flex">
+<button class="px-4 py-2 rounded-lg bg-electric-blue text-deep-charcoal font-bold font-label-sm text-xs flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">view_in_ar</span>
+                        3D 视图
+                    </button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant font-label-sm text-xs flex items-center gap-2 hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-[18px]">flatware</span>
+                        2D 平面
+                    </button>
+</div>
+</div>
+<!-- Zoom Controls (Bottom Right) -->
+<div class="absolute bottom-6 right-[424px] flex flex-col gap-2">
+<button class="w-10 h-10 glass-panel rounded-lg flex items-center justify-center hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="w-10 h-10 glass-panel rounded-lg flex items-center justify-center hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<button class="w-10 h-10 glass-panel rounded-lg flex items-center justify-center hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">center_focus_strong</span>
+</button>
+</div>
+</div>
+<!-- Footer (Shared Component) -->
+<footer class="w-full ml-0 p-4 bg-deep-charcoal dark:bg-deep-charcoal border-t border-outline-variant flex justify-between items-center px-margin-lg h-12 shrink-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant">知衍进化系统 v2.4</span>
+<div class="flex gap-6">
+<a class="font-label-sm text-label-sm text-mint-evolution hover:text-on-surface transition-opacity" href="#">RAGFlow: 在线</a>
+<a class="font-label-sm text-label-sm text-mint-evolution hover:text-on-surface transition-opacity" href="#">Milvus: 激活</a>
+<a class="font-label-sm text-label-sm text-mint-evolution hover:text-on-surface transition-opacity" href="#">RabbitMQ: 稳定</a>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interactions for the graph nodes
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('graph-canvas');
+            let isPanning = false;
+            let startX, startY;
+
+            canvas.addEventListener('mousedown', (e) => {
+                isPanning = true;
+                startX = e.pageX;
+                startY = e.pageY;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isPanning) return;
+                const dx = e.pageX - startX;
+                const dy = e.pageY - startY;
+                // Simplified pan visual feedback
+                const svg = canvas.querySelector('svg');
+                svg.style.transform = `translate(${dx * 0.1}px, ${dy * 0.1}px)`;
+            });
+
+            window.addEventListener('mouseup', () => {
+                isPanning = false;
+            });
+
+            // Hover effects for doc cards
+            const docCards = document.querySelectorAll('.glass-panel.group');
+            docCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-2px)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body></html>

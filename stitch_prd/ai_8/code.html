@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知衍 AI - 个人中心</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(30, 32, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .ai-glow-hover:hover {
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.2);
+            border-color: #00F5FF;
+        }
+        .evolution-gradient {
+            background: linear-gradient(135deg, #00F5FF 0%, #A2FFD6 100%);
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0C0E;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2C313A;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#d3e4ff",
+                        "on-error": "#690005",
+                        "on-tertiary-container": "#003b29",
+                        "on-secondary-fixed-variant": "#004f53",
+                        "inverse-primary": "#0060a9",
+                        "tertiary-container": "#50ac88",
+                        "on-background": "#e2e2e6",
+                        "surface-container-lowest": "#0c0e11",
+                        "on-primary": "#00315b",
+                        "on-tertiary-fixed-variant": "#00513a",
+                        "tertiary-fixed": "#98f5cc",
+                        "slate-gray": "#2C313A",
+                        "on-secondary-fixed": "#002021",
+                        "on-tertiary": "#003827",
+                        "surface": "#111316",
+                        "outline-variant": "#404752",
+                        "on-primary-fixed": "#001c38",
+                        "error": "#ffb4ab",
+                        "error-red": "#F56C6C",
+                        "surface-tint": "#a2c9ff",
+                        "secondary-container": "#00f4fe",
+                        "background": "#111316",
+                        "secondary-fixed": "#63f7ff",
+                        "surface-bright": "#37393d",
+                        "warning-amber": "#E6A23C",
+                        "on-tertiary-fixed": "#002115",
+                        "error-container": "#93000a",
+                        "surface-container": "#1e2023",
+                        "inverse-on-surface": "#2f3034",
+                        "surface-container-low": "#1a1c1f",
+                        "surface-variant": "#333538",
+                        "on-secondary-container": "#006c71",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#003739",
+                        "primary-fixed-dim": "#a2c9ff",
+                        "tertiary": "#7cd8b1",
+                        "on-primary-fixed-variant": "#004881",
+                        "tertiary-fixed-dim": "#7cd8b1",
+                        "primary-container": "#409eff",
+                        "outline": "#8a919e",
+                        "on-surface": "#e2e2e6",
+                        "surface-dim": "#111316",
+                        "electric-blue": "#00F5FF",
+                        "deep-charcoal": "#0B0C0E",
+                        "on-surface-variant": "#c0c7d4",
+                        "mint-evolution": "#A2FFD6",
+                        "inverse-surface": "#e2e2e6",
+                        "on-primary-container": "#003460",
+                        "secondary-fixed-dim": "#00dce5",
+                        "surface-container-high": "#282a2d",
+                        "surface-container-highest": "#333538",
+                        "secondary": "#e6feff",
+                        "primary": "#a2c9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "gutter": "24px",
+                        "margin-sm": "16px",
+                        "margin-md": "32px",
+                        "margin-lg": "64px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-electric-blue/30 overflow-x-hidden">
+<!-- Side Navigation Shell -->
+<nav class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant flex flex-col py-margin-md px-margin-sm z-50">
+<div class="mb-10 px-4">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary">知衍</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">AI 工作坊</p>
+</div>
+<div class="flex flex-col gap-1 flex-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">控制台</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span class="font-label-md text-label-md">知识库</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-label-md text-label-md">进化中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="sports_esports">sports_esports</span>
+<span class="font-label-md text-label-md">游戏中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="font-label-md text-label-md">图谱分析</span>
+</a>
+<!-- ACTIVE TAB: Settings/Profile Mapping -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-electric-blue font-bold border-r-4 border-electric-blue bg-surface-variant/20 transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">设置</span>
+</a>
+</div>
+<button class="mt-auto bg-primary text-on-primary py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-label-md hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+            新建知识
+        </button>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-64 flex flex-col min-h-screen relative">
+<!-- Top App Bar Shell -->
+<header class="docked full-width top-0 sticky z-40 bg-surface/60 backdrop-blur-xl border-b border-outline-variant flex justify-between items-center w-full px-margin-lg h-16">
+<div class="flex items-center gap-4 bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant w-96">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full placeholder:text-on-surface-variant/50" placeholder="搜索架构、勋章或链接..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue transition-colors cursor-pointer" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue transition-colors cursor-pointer" data-icon="military_tech">military_tech</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue transition-colors cursor-pointer" data-icon="star">star</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-electric-blue transition-colors cursor-pointer" data-icon="monetization_on">monetization_on</span>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="font-label-md text-on-surface leading-none">Alex Chen</p>
+<p class="font-label-sm text-electric-blue text-[10px]">高级访问权限</p>
+</div>
+<img class="w-10 h-10 rounded-full border border-electric-blue p-0.5 object-cover" data-alt="A professional portrait of a tech-savvy individual named Alex Chen. He has a focused expression, wearing sleek modern glasses and a dark tech-wear jacket. The background is a blurred high-end AI research lab with cool cyan and deep indigo lighting accents, reflecting a sophisticated minimalist tech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuPQ_xeQ3jr1-JYpFFRBabkNJCWnbggN5BaU_Zg64mvU9_JqDDl9cqG0tDhHVgKhdtUaHAltraXxA4pJIgcbOS535r8emObJD3GoV2ryfgUgoMZMMwIlgiFknIjgcERIEBiugBZo2SyCcYQ8NvUV9kmXpXalLglB67qs7pzmfDt1tYJW8XYl4GqzWf_M1XU65oZCSCU7lVuLV9Hp1Mr_jFWE976LcrmfFsWWZalES9hw6OTexN3mYHPwHxtB24f9b1QNlq0YhsiBAe"/>
+</div>
+</div>
+</header>
+<!-- Profile Content Canvas -->
+<div class="flex-1 p-margin-lg max-w-container-max mx-auto w-full">
+<!-- Hero Profile Section -->
+<section class="mb-12 flex flex-col md:flex-row items-end gap-8">
+<div class="relative group">
+<div class="absolute inset-0 bg-electric-blue rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+<img class="w-40 h-40 rounded-2xl object-cover relative z-10 border border-outline-variant glass-card" data-alt="Close up profile photo of Alex Chen, a digital knowledge architect. The lighting is dramatic, coming from the side with electric blue highlights on his face and shoulder. He is set against a dark, minimalist background with faint digital data streams visualised as thin glowing lines, maintaining a high-end digital laboratory feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB90DX4cUxQZxmMmGJC1Epd8IooXI7asTDAa7hhUqA7r65F5_z8nvFrFYf4Ei2LOfwWiuyPhH3GJ_NFFLG-vRiNJVmMSk8HhI_fBiXwd4wtHjhRrMfuY-Y8SgKrcpH2qPv9D9_G9y8ANc3ytBTlUbKOH0akFR5C_RyW2sHHPFWtBriGptffq1XFO1TQFtuAAjA8aKWmfHMNqiO0Uu910xvHMLdVFkcm-DArCOzRGFdKDeJdpdqQwZR71gxq6pDiEJ4VuAWRZ0RwZxI4"/>
+<div class="absolute -bottom-2 -right-2 bg-electric-blue text-deep-charcoal p-1.5 rounded-lg z-20 shadow-lg">
+<span class="material-symbols-outlined text-[20px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="flex-1 pb-2">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Alex Chen</h2>
+<div class="flex items-center gap-3 mb-4">
+<span class="font-label-md text-electric-blue bg-electric-blue/10 px-3 py-1 rounded-full border border-electric-blue/20">知识架构师</span>
+<span class="text-on-surface-variant font-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="location_on">location_on</span>
+                            新京都集群
+                        </span>
+</div>
+<p class="text-on-surface-variant font-body-md max-w-2xl">
+                        自 2021 年起开始合成神经架构。专注于 RAG 优化和多源进化逻辑。目前正在训练一个用于递归知识发现的私有模型。
+                    </p>
+</div>
+<div class="flex gap-3 pb-2">
+<button class="bg-surface-container-high text-on-surface px-6 py-2.5 rounded-lg font-label-md border border-outline-variant hover:bg-surface-variant transition-colors">编辑资料</button>
+<button class="bg-electric-blue text-deep-charcoal px-6 py-2.5 rounded-lg font-label-md font-bold hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+                        分享作品集
+                    </button>
+</div>
+</section>
+<!-- Statistics Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+<!-- Rank Card -->
+<div class="glass-card p-6 rounded-xl flex flex-col justify-between ai-glow-hover transition-all relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="trending_up">trending_up</span>
+</div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">进化等级</p>
+<div class="mt-4">
+<h3 class="font-headline-md text-headline-md text-mint-evolution">大宗师 II</h3>
+<p class="font-label-sm text-on-surface-variant">全球前 0.4%</p>
+</div>
+<div class="mt-6 bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="evolution-gradient h-full w-[82%]"></div>
+</div>
+<p class="font-label-sm text-on-surface-variant mt-2 text-right">8,240 / 10,000 XP</p>
+</div>
+<!-- Knowledge Nodes -->
+<div class="glass-card p-6 rounded-xl ai-glow-hover transition-all">
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest mb-4">知识总量</p>
+<div class="flex items-baseline gap-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">1,428</h3>
+<span class="font-label-sm text-mint-evolution">今日 +12</span>
+</div>
+<p class="font-label-sm text-on-surface-variant mt-2">已验证神经节点</p>
+<div class="mt-8 flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-electric-blue/20 border border-electric-blue/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-electric-blue" data-icon="article">article</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-mint-evolution/20 border border-mint-evolution/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-mint-evolution" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary-container/20 border border-primary-container/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="link">link</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center text-[10px] font-label-sm text-on-surface-variant">+4</div>
+</div>
+</div>
+<!-- Achievements Counter -->
+<div class="glass-card p-6 rounded-xl ai-glow-hover transition-all col-span-1 md:col-span-2 flex items-center">
+<div class="flex-1">
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">成就勋章</p>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">已解锁 34 枚</h3>
+<p class="font-label-sm text-on-surface-variant max-w-[200px]">你本月获得了 4 枚稀有铂金成就。</p>
+</div>
+<div class="flex flex-wrap gap-2 justify-end max-w-[240px]">
+<!-- Mini badge grid for visual interest -->
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-warning-amber" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-electric-blue" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-mint-evolution" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="history_edu">history_edu</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="psychology">psychology</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="science">science</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant flex items-center justify-center text-on-surface-variant font-label-sm">+27</div>
+</div>
+</div>
+</div>
+<!-- Achievement Wall -->
+<section class="mb-12">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-md text-headline-md">成就墙</h3>
+<button class="text-electric-blue font-label-md hover:underline">查看全部勋章</button>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+<!-- Achievement Card 1 -->
+<div class="glass-card p-4 rounded-xl flex flex-col items-center text-center border-mint-evolution/30">
+<div class="w-16 h-16 rounded-full bg-mint-evolution/10 border border-mint-evolution/30 flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(162,255,214,0.1)]">
+<span class="material-symbols-outlined text-3xl text-mint-evolution" data-icon="event_available" style="font-variation-settings: 'FILL' 1;">event_available</span>
+</div>
+<p class="font-label-md text-on-surface mb-1">7天连学</p>
+<p class="font-label-sm text-on-surface-variant">持续合成知识</p>
+</div>
+<!-- Achievement Card 2 -->
+<div class="glass-card p-4 rounded-xl flex flex-col items-center text-center border-electric-blue/30">
+<div class="w-16 h-16 rounded-full bg-electric-blue/10 border border-electric-blue/30 flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(0,245,255,0.1)]">
+<span class="material-symbols-outlined text-3xl text-electric-blue" data-icon="terminal" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<p class="font-label-md text-on-surface mb-1">神经架构师</p>
+<p class="font-label-sm text-on-surface-variant">100+ 自定义节点</p>
+</div>
+<!-- Achievement Card 3 -->
+<div class="glass-card p-4 rounded-xl flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-3xl text-warning-amber" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-label-md text-on-surface mb-1">社区之星</p>
+<p class="font-label-sm text-on-surface-variant">收到 50 次分享</p>
+</div>
+<!-- Achievement Card 4 -->
+<div class="glass-card p-4 rounded-xl flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-3xl text-on-surface-variant" data-icon="layers" style="font-variation-settings: 'FILL' 1;">layers</span>
+</div>
+<p class="font-label-md text-on-surface mb-1">深度思考者</p>
+<p class="font-label-sm text-on-surface-variant">10小时推理时长</p>
+</div>
+<!-- Achievement Card 5 -->
+<div class="glass-card p-4 rounded-xl flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-3xl text-on-surface-variant" data-icon="hub" style="font-variation-settings: 'FILL' 1;">hub</span>
+</div>
+<p class="font-label-md text-on-surface mb-1">图谱大师</p>
+<p class="font-label-sm text-on-surface-variant">连接 500 个节点</p>
+</div>
+<!-- Locked Achievement -->
+<div class="glass-card p-4 rounded-xl flex flex-col items-center text-center opacity-40 grayscale">
+<div class="w-16 h-16 rounded-full bg-surface-container-lowest border border-dashed border-outline-variant flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-3xl" data-icon="lock">lock</span>
+</div>
+<p class="font-label-md text-on-surface mb-1">进化者 X</p>
+<p class="font-label-sm text-on-surface-variant">需达到大宗师 III</p>
+</div>
+</div>
+</section>
+<!-- My Shared Links Section -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-md text-headline-md">我的分享链接</h3>
+<div class="flex gap-2">
+<button class="bg-surface-container-high text-on-surface px-4 py-1.5 rounded-lg font-label-sm border border-outline-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                            筛选
+                        </button>
+<button class="bg-surface-container-high text-on-surface px-4 py-1.5 rounded-lg font-label-sm border border-outline-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="sort">sort</span>
+                            最近
+                        </button>
+</div>
+</div>
+<div class="space-y-3">
+<!-- Active Link -->
+<div class="glass-card p-4 rounded-xl flex items-center justify-between hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-electric-blue/10 flex items-center justify-center text-electric-blue">
+<span class="material-symbols-outlined" data-icon="link">link</span>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface">神经网络基础 v2.4</h4>
+<p class="font-label-sm text-on-surface-variant">zhiyan.ai/s/xf72-nk82 · 与 Alpha 团队共享</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="font-label-sm text-mint-evolution">活跃</p>
+<p class="font-label-sm text-on-surface-variant">12 天后过期</p>
+</div>
+<div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-variant rounded-lg text-on-surface-variant"><span class="material-symbols-outlined text-[20px]" data-icon="content_copy">content_copy</span></button>
+<button class="p-2 hover:bg-surface-variant rounded-lg text-on-surface-variant"><span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
+<button class="p-2 hover:bg-surface-variant rounded-lg text-error-red"><span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Active Link 2 -->
+<div class="glass-card p-4 rounded-xl flex items-center justify-between hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-electric-blue/10 flex items-center justify-center text-electric-blue">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface">递归推理白皮书（草案）</h4>
+<p class="font-label-sm text-on-surface-variant">zhiyan.ai/s/pp23-qm10 · 公开链接</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="font-label-sm text-mint-evolution">活跃</p>
+<p class="font-label-sm text-on-surface-variant">永不过期</p>
+</div>
+<div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-variant rounded-lg text-on-surface-variant"><span class="material-symbols-outlined text-[20px]" data-icon="content_copy">content_copy</span></button>
+<button class="p-2 hover:bg-surface-variant rounded-lg text-on-surface-variant"><span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
+<button class="p-2 hover:bg-surface-variant rounded-lg text-error-red"><span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Expired Link -->
+<div class="glass-card p-4 rounded-xl flex items-center justify-between opacity-60 group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="link_off">link_off</span>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface">每周合成报告 #42</h4>
+<p class="font-label-sm text-on-surface-variant">zhiyan.ai/s/ab12-cd34 · 私人存档</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="font-label-sm text-on-surface-variant">已过期</p>
+<p class="font-label-sm text-on-surface-variant">结束于 2024年1月15日</p>
+</div>
+<div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-electric-blue/10 text-electric-blue px-3 py-1 rounded-lg font-label-sm border border-electric-blue/20">重新激活</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Shell -->
+<footer class="w-full ml-64 p-4 mt-auto border-t border-outline-variant bg-deep-charcoal dark:bg-deep-charcoal flex justify-between items-center max-w-[calc(100%-16rem)] px-margin-lg">
+<span class="font-label-sm text-label-sm text-on-surface-variant">知衍进化系统 v2.4</span>
+<div class="flex gap-6">
+<a class="font-label-sm text-label-sm text-mint-evolution hover:text-on-surface transition-opacity" href="#">RAGFlow: 联机</a>
+<a class="font-label-sm text-label-sm text-mint-evolution hover:text-on-surface transition-opacity" href="#">Milvus: 活跃</a>
+<a class="font-label-sm text-label-sm text-mint-evolution hover:text-on-surface transition-opacity" href="#">RabbitMQ: 稳定</a>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interactions and atmospheric effects
+        document.addEventListener('mousemove', (e) => {
+            const glow = document.getElementById('mouse-glow');
+            if (glow) {
+                glow.style.left = e.clientX + 'px';
+                glow.style.top = e.clientY + 'px';
+            }
+        });
+
+        // Initialize any tooltips or animations if needed
+        console.log("ZhiYan Profile Interface Initialized");
+    </script>
+<div class="fixed pointer-events-none w-[500px] h-[500px] bg-electric-blue/5 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 z-0" id="mouse-glow"></div>
+</body></html>

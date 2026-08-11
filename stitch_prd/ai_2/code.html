@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智言 | 知识库 - 素材管理</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(26, 28, 31, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .ai-glow-hover:hover {
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.15);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #404752;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8a919e;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#a2c9ff",
+                        "surface-container-low": "#1a1c1f",
+                        "surface": "#111316",
+                        "background": "#111316",
+                        "deep-charcoal": "#0B0C0E",
+                        "surface-variant": "#333538",
+                        "outline": "#8a919e",
+                        "mint-evolution": "#A2FFD6",
+                        "electric-blue": "#00F5FF",
+                        "outline-variant": "#404752",
+                        "on-surface": "#e2e2e6",
+                        "on-surface-variant": "#c0c7d4",
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-md": "32px",
+                        "margin-lg": "64px",
+                        "unit": "8px",
+                        "margin-sm": "16px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "label-md": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant flex flex-col py-margin-md px-margin-sm z-50">
+<div class="mb-8 px-4">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">智言 ZhiYan</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-70">AI 工作坊</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="font-label-md">控制台</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-electric-blue font-bold border-r-4 border-electric-blue bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">database</span>
+<span class="font-label-md">知识库</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl">psychology</span>
+<span class="font-label-md">进化中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl">sports_esports</span>
+<span class="font-label-md">游戏中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl">hub</span>
+<span class="font-label-md">图谱分析</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="font-label-md">设置</span>
+</a>
+</nav>
+<button class="mt-auto mx-4 bg-primary text-on-primary-container font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-md">新建知识</span>
+</button>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-lg h-16 sticky top-0 z-40 bg-surface/60 backdrop-blur-xl border-b border-outline-variant">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-deep-charcoal border border-outline-variant rounded-full py-2 pl-10 pr-4 text-body-md focus:border-electric-blue focus:ring-0 transition-all" placeholder="搜索知识产出..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="material-symbols-outlined hover:text-electric-blue transition-colors">notifications</button>
+<button class="material-symbols-outlined hover:text-electric-blue transition-colors">military_tech</button>
+<button class="material-symbols-outlined hover:text-electric-blue transition-colors">star</button>
+<div class="h-6 w-[1px] bg-outline-variant mx-2"></div>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-body-md font-bold text-on-surface">Alex Rivera</p>
+<p class="text-label-sm text-on-surface-variant opacity-70">知识架构师</p>
+</div>
+<div class="w-10 h-10 rounded-full border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a tech-savvy user in their 30s with short hair, wearing a sleek black hoodie, set against a background of glowing blue digital interfaces and neural networks. The lighting is low-key with cool blue rim highlights, conveying a focused, high-tech AI workshop atmosphere consistent with a dark mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChc5XL1efWjBpWov4CaIVEVQzZGNund3o-AL4aToy_9zeunBZTOT43vOqeOMsC2FaedqsnvtTNxlODQsyznIHZA87rss-hAN684CSn5PCdv_woqCpnmVbcGf9oIXSNll4-m9p4wjGTdVhU4-kyeFWqiyCS4fRHDOdre-5a5le3GwkcyZDz3GyfD_YdYBMIhrRR4YdfFPbrrL6oicb0ZMTPu9zr1ipf0FML5GGPmDozyQa6Nfd4Fnx0wJ2RRH97ZDsk-VTU-n6DSyrX"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 px-margin-lg py-10 max-w-7xl">
+<!-- Header Section -->
+<div class="mb-10">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">素材管理</h2>
+<p class="text-on-surface-variant">集中处理多格式素材，转化为 AI 就绪的知识片段。</p>
+</div>
+<!-- Multi-source Import Area (Glassmorphism) -->
+<section class="glass-panel rounded-2xl p-8 mb-10">
+<h3 class="font-label-md text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">input</span>
+                    采集引擎
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+<!-- Local Upload -->
+<button class="group flex flex-col items-center justify-center p-6 border border-dashed border-outline-variant rounded-xl hover:border-electric-blue hover:bg-electric-blue/5 transition-all ai-glow-hover">
+<span class="material-symbols-outlined text-3xl mb-3 text-on-surface-variant group-hover:text-electric-blue">upload_file</span>
+<span class="font-label-md text-center">本地上传</span>
+<span class="text-xs text-on-surface-variant mt-1">PDF, DOCX, TXT</span>
+</button>
+<!-- URL Fetch -->
+<button class="group flex flex-col items-center justify-center p-6 border border-dashed border-outline-variant rounded-xl hover:border-electric-blue hover:bg-electric-blue/5 transition-all ai-glow-hover">
+<span class="material-symbols-outlined text-3xl mb-3 text-on-surface-variant group-hover:text-electric-blue">link</span>
+<span class="font-label-md text-center">链接抓取</span>
+<span class="text-xs text-on-surface-variant mt-1">网页, 维基</span>
+</button>
+<!-- Manual Input -->
+<button class="group flex flex-col items-center justify-center p-6 border border-dashed border-outline-variant rounded-xl hover:border-electric-blue hover:bg-electric-blue/5 transition-all ai-glow-hover">
+<span class="material-symbols-outlined text-3xl mb-3 text-on-surface-variant group-hover:text-electric-blue">edit_note</span>
+<span class="font-label-md text-center">手动输入</span>
+<span class="text-xs text-on-surface-variant mt-1">直接编辑器</span>
+</button>
+<!-- Video Import -->
+<button class="group flex flex-col items-center justify-center p-6 border border-dashed border-outline-variant rounded-xl hover:border-electric-blue hover:bg-electric-blue/5 transition-all ai-glow-hover">
+<span class="material-symbols-outlined text-3xl mb-3 text-on-surface-variant group-hover:text-electric-blue">movie</span>
+<span class="font-label-md text-center">视频导入</span>
+<span class="text-xs text-on-surface-variant mt-1">自动转录</span>
+</button>
+<!-- Image OCR -->
+<button class="group flex flex-col items-center justify-center p-6 border border-dashed border-outline-variant rounded-xl hover:border-electric-blue hover:bg-electric-blue/5 transition-all ai-glow-hover">
+<span class="material-symbols-outlined text-3xl mb-3 text-on-surface-variant group-hover:text-electric-blue">photo_camera</span>
+<span class="font-label-md text-center">图片识别</span>
+<span class="text-xs text-on-surface-variant mt-1">提取文字</span>
+</button>
+</div>
+</section>
+<!-- Table Filters & Search -->
+<div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+<div class="flex items-center gap-2">
+<button class="bg-surface-variant text-on-surface px-4 py-1.5 rounded-full text-label-sm border border-outline-variant">全部素材</button>
+<button class="hover:bg-surface-variant text-on-surface-variant px-4 py-1.5 rounded-full text-label-sm transition-colors">处理中</button>
+<button class="hover:bg-surface-variant text-on-surface-variant px-4 py-1.5 rounded-full text-label-sm transition-colors">已就绪</button>
+<button class="hover:bg-surface-variant text-on-surface-variant px-4 py-1.5 rounded-full text-label-sm transition-colors">失败</button>
+</div>
+<div class="flex items-center gap-4">
+<select class="bg-surface border border-outline-variant rounded-lg px-3 py-1.5 text-label-sm text-on-surface-variant focus:border-electric-blue focus:ring-0">
+<option>按日期排序</option>
+<option>按大小排序</option>
+<option>按类型排序</option>
+</select>
+</div>
+</div>
+<!-- Material List Table / Empty State -->
+<div class="bg-surface-container-low rounded-2xl border border-outline-variant overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead class="bg-deep-charcoal/50 text-on-surface-variant text-label-sm uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4 font-medium">名称</th>
+<th class="px-6 py-4 font-medium">类型</th>
+<th class="px-6 py-4 font-medium">大小</th>
+<th class="px-6 py-4 font-medium">状态</th>
+<th class="px-6 py-4 font-medium text-right">操作</th>
+</tr>
+</thead>
+<tbody id="material-list-body">
+<!-- Item 1 -->
+<tr class="border-b border-outline-variant/30 hover:bg-surface-variant/20 transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+<div>
+<p class="text-body-md font-medium">神经网络优化指南.pdf</p>
+<p class="text-xs text-on-surface-variant">2小时前添加</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="bg-slate-gray/50 text-on-surface-variant px-2 py-1 rounded text-xs">PDF</span>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">4.2 MB</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 text-mint-evolution">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span class="text-label-sm">已就绪</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-2 hover:text-electric-blue transition-colors material-symbols-outlined" title="预览">visibility</button>
+<button class="p-2 hover:text-electric-blue transition-colors material-symbols-outlined" title="问答">forum</button>
+<button class="p-2 hover:text-error-red transition-colors material-symbols-outlined" title="删除">delete</button>
+</div>
+</td>
+</tr>
+<!-- Item 2 -->
+<tr class="border-b border-outline-variant/30 hover:bg-surface-variant/20 transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-warning-amber">video_library</span>
+<div>
+<p class="text-body-md font-medium">第一天研讨会录像.mp4</p>
+<p class="text-xs text-on-surface-variant">时长 12:45</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="bg-slate-gray/50 text-on-surface-variant px-2 py-1 rounded text-xs">视频</span>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">128 MB</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 text-electric-blue animate-pulse">
+<span class="material-symbols-outlined text-sm">sync</span>
+<span class="text-label-sm">转写中...</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center justify-end gap-2 opacity-40 pointer-events-none">
+<button class="p-2 material-symbols-outlined">visibility</button>
+<button class="p-2 material-symbols-outlined">forum</button>
+<button class="p-2 material-symbols-outlined">delete</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Empty State (Hidden by default, shown if no rows) -->
+<div class="hidden flex flex-col items-center justify-center py-20 px-6 text-center" id="empty-state">
+<div class="mb-6 relative">
+<div class="absolute inset-0 bg-electric-blue/10 blur-3xl rounded-full"></div>
+<span class="material-symbols-outlined text-8xl text-outline-variant relative">inventory_2</span>
+</div>
+<h4 class="text-headline-md text-on-surface mb-2">未发现知识</h4>
+<p class="text-on-surface-variant max-w-md mx-auto mb-8">您的知识库正在等待构建。开始导入文档、视频或网页链接，为 AI 推理引擎提供养分。</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
+<div class="p-4 bg-deep-charcoal border border-outline-variant rounded-xl text-left hover:border-electric-blue transition-colors cursor-pointer group">
+<p class="font-bold text-on-surface flex items-center gap-2 group-hover:text-electric-blue">
+<span class="material-symbols-outlined text-sm">lightbulb</span>
+                                快捷提示
+                            </p>
+<p class="text-xs text-on-surface-variant mt-1">上传 PDF 研究论文以自动生成用于语义搜索的向量嵌入。</p>
+</div>
+<div class="p-4 bg-deep-charcoal border border-outline-variant rounded-xl text-left hover:border-electric-blue transition-colors cursor-pointer group">
+<p class="font-bold text-on-surface flex items-center gap-2 group-hover:text-electric-blue">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+                                AI 建议
+                            </p>
+<p class="text-xs text-on-surface-variant mt-1">导入会议记录以提取待办事项并总结关键技术决策。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto w-full border-t border-outline-variant p-4 bg-deep-charcoal flex justify-between items-center px-margin-lg">
+<span class="font-label-sm text-label-sm text-on-surface-variant">智言进化系统 v2.4</span>
+<div class="flex gap-6">
+<span class="text-mint-evolution font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-mint-evolution rounded-full"></span> RAGFlow: 联机
+                </span>
+<span class="text-mint-evolution font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-mint-evolution rounded-full"></span> Milvus: 活跃
+                </span>
+<span class="text-mint-evolution font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-mint-evolution rounded-full"></span> RabbitMQ: 稳定
+                </span>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interaction: Toggle empty state for demo purposes
+        function checkEmptyState() {
+            const tableRows = document.querySelectorAll('#material-list-body tr');
+            const emptyState = document.getElementById('empty-state');
+            const tableElement = document.querySelector('table');
+            
+            if (tableRows.length === 0) {
+                emptyState.classList.remove('hidden');
+                tableElement.classList.add('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                tableElement.classList.remove('hidden');
+            }
+        }
+
+        // Action button interaction
+        document.querySelectorAll('button[title="delete"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if(confirm('您确定要移除此素材吗？这将删除所有相关的向量嵌入。')) {
+                    this.closest('tr').remove();
+                    checkEmptyState();
+                }
+            });
+        });
+
+        // Simple mock for "Processing" status update
+        setTimeout(() => {
+            const processingRow = document.querySelector('.animate-pulse');
+            if (processingRow) {
+                processingRow.classList.remove('animate-pulse', 'text-electric-blue');
+                processingRow.classList.add('text-mint-evolution');
+                processingRow.innerHTML = '<span class="material-symbols-outlined text-sm">check_circle</span><span class="text-label-sm">已就绪</span>';
+                
+                const actions = processingRow.closest('tr').querySelector('.opacity-40');
+                if(actions) actions.classList.remove('opacity-40', 'pointer-events-none');
+            }
+        }, 5000);
+    </script>
+</body></html>

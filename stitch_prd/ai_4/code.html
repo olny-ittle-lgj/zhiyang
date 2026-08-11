@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智衍 | 游戏中心</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary": "#a2c9ff",
+                      "on-tertiary-fixed-variant": "#00513a",
+                      "surface-container-low": "#1a1c1f",
+                      "surface": "#111316",
+                      "background": "#111316",
+                      "on-secondary-container": "#006c71",
+                      "on-tertiary-container": "#003b29",
+                      "deep-charcoal": "#0B0C0E",
+                      "on-secondary": "#003739",
+                      "surface-variant": "#333538",
+                      "on-primary-container": "#003460",
+                      "outline": "#8a919e",
+                      "surface-container-high": "#282a2d",
+                      "tertiary-fixed-dim": "#7cd8b1",
+                      "inverse-on-surface": "#2f3034",
+                      "mint-evolution": "#A2FFD6",
+                      "warning-amber": "#E6A23C",
+                      "on-primary": "#00315b",
+                      "error-red": "#F56C6C",
+                      "inverse-primary": "#0060a9",
+                      "surface-tint": "#a2c9ff",
+                      "secondary-fixed": "#63f7ff",
+                      "outline-variant": "#404752",
+                      "tertiary": "#7cd8b1",
+                      "on-background": "#e2e2e6",
+                      "on-tertiary": "#003827",
+                      "primary-container": "#409eff",
+                      "on-surface-variant": "#c0c7d4",
+                      "tertiary-container": "#50ac88",
+                      "secondary-container": "#00f4fe",
+                      "tertiary-fixed": "#98f5cc",
+                      "electric-blue": "#00F5FF",
+                      "primary-fixed-dim": "#a2c9ff",
+                      "surface-dim": "#111316",
+                      "on-primary-fixed": "#001c38",
+                      "error": "#ffb4ab",
+                      "inverse-surface": "#e2e2e6",
+                      "secondary": "#e6feff",
+                      "on-primary-fixed-variant": "#004881",
+                      "surface-container-highest": "#333538",
+                      "primary-fixed": "#d3e4ff",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary-fixed": "#002021",
+                      "surface-container-lowest": "#0c0e11",
+                      "on-tertiary-fixed": "#002115",
+                      "error-container": "#93000a",
+                      "surface-container": "#1e2023",
+                      "on-surface": "#e2e2e6",
+                      "secondary-fixed-dim": "#00dce5",
+                      "slate-gray": "#2C313A",
+                      "surface-bright": "#37393d",
+                      "on-secondary-fixed-variant": "#004f53",
+                      "on-error": "#690005"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1440px",
+                      "margin-md": "32px",
+                      "margin-lg": "64px",
+                      "unit": "8px",
+                      "margin-sm": "16px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "label-sm": ["JetBrains Mono"],
+                      "headline-lg-mobile": ["Inter"],
+                      "label-md": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["30px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(44, 49, 58, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glow-blue:hover {
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #404752; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface custom-scrollbar selection:bg-electric-blue/30 overflow-x-hidden">
+<!-- Side Navigation Bar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant flex flex-col py-margin-md px-margin-sm z-[60]">
+<div class="px-4 mb-10">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary">智衍</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-70">AI 工作坊</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">控制台</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-label-md text-label-md">知识库</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-md text-label-md">进化中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-electric-blue font-bold border-r-4 border-electric-blue bg-surface-variant/30" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
+<span class="font-label-md text-label-md">游戏中心</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-label-md text-label-md">图谱分析</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">设置</span>
+</a>
+</nav>
+<button class="mt-auto bg-primary text-on-primary-container font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-transform active:scale-95">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-md text-label-md">新建知识</span>
+</button>
+</aside>
+<!-- Main Content Area -->
+<div class="ml-64 min-h-screen flex flex-col">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-50 bg-surface/60 backdrop-blur-xl border-b border-outline-variant flex justify-between items-center w-full px-margin-lg h-16">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full bg-surface-container-lowest border-none rounded-full pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-electric-blue transition-all" placeholder="搜索游戏或技能..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-electric-blue transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error-red rounded-full"></span>
+</button>
+<button class="hover:text-electric-blue transition-colors">
+<span class="material-symbols-outlined">military_tech</span>
+</button>
+<button class="hover:text-electric-blue transition-colors">
+<span class="material-symbols-outlined">star</span>
+</button>
+<button class="hover:text-electric-blue transition-colors">
+<span class="material-symbols-outlined">monetization_on</span>
+</button>
+</div>
+<div class="h-8 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface">Alex Chen</p>
+<p class="text-[10px] text-mint-evolution font-label-sm uppercase tracking-tighter">专业开发者</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-outline-variant object-cover" data-alt="A high-tech digital portrait of a young professional with subtle holographic data overlays on their face, set against a dark, minimalist laboratory background with soft electric blue rim lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHR6K1rL_Ld1RngilTMVRD9K2BXMv2rPg_ipGrES4a9yQA0-hlYGD1l4pHjknJVqTXtbt_M9d1A5Y1q8ITkiJzQlLhcOYL5J3m1PUcwNr1GhxETXMlS_kvdt3pN8kPQErrcHK9mOG9aQunlIufpE_bnTiEZHevl676VFKMJ9tQ6waIDmeJyDpxBHBrR8J7HM3a8LoBLsIzAbUY3FyWUqkSp7n9xacDrytj17k9khjc93iy8wljpQK09Pr0TOXPj-cQHdaoeownTWCU"/>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<main class="flex-1 p-margin-lg max-w-[1440px] mx-auto w-full">
+<!-- Hero / User Stats Section -->
+<section class="mb-12">
+<div class="glass-panel rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+<!-- Background Accent -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-electric-blue/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-12 w-full">
+<div class="flex flex-col">
+<span class="text-on-surface-variant font-label-sm uppercase mb-2">当前等级</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-electric-blue">32</span>
+<span class="text-mint-evolution text-xs font-label-sm">+4 今日</span>
+</div>
+</div>
+<div class="flex flex-col col-span-2">
+<span class="text-on-surface-variant font-label-sm uppercase mb-2">知识经验值</span>
+<div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden mb-2">
+<div class="h-full bg-gradient-to-r from-primary to-electric-blue w-[74%] shadow-[0_0_10px_rgba(0,245,255,0.4)]"></div>
+</div>
+<div class="flex justify-between text-[11px] font-label-md">
+<span class="text-on-surface">14,200 XP</span>
+<span class="text-on-surface-variant">距离等级 33 还需 20,000 XP</span>
+</div>
+</div>
+<div class="flex items-center gap-6 justify-end">
+<div class="text-center">
+<div class="flex items-center gap-1 text-warning-amber">
+<span class="material-symbols-outlined fill-1 text-xl" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
+<span class="text-xl font-bold">1,450</span>
+</div>
+<span class="text-[10px] text-on-surface-variant uppercase">智衍币</span>
+</div>
+<div class="text-center">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined fill-1 text-xl" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="text-xl font-bold">12</span>
+</div>
+<span class="text-[10px] text-on-surface-variant uppercase">强化道具</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Hub Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Games List -->
+<div class="lg:col-span-8 space-y-8">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md">游戏模块</h2>
+<div class="flex items-center gap-2 px-3 py-1 bg-mint-evolution/10 rounded-full border border-mint-evolution/20">
+<span class="material-symbols-outlined text-mint-evolution text-sm">verified</span>
+<span class="font-label-sm text-mint-evolution text-[11px] uppercase tracking-wider">题目已通过校验</span>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6">
+<!-- Card 1: Smart Flashcards -->
+<div class="glass-panel group rounded-2xl overflow-hidden hover:border-electric-blue/40 transition-all duration-300 flex flex-col md:flex-row">
+<div class="w-full md:w-64 h-48 md:h-auto overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A futuristic deck of digital flashcards floating in a void of dark glass. The cards are emitting soft teal and blue light, displaying complex mathematical equations and neural network diagrams in a sharp, minimalist interface style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdfjHh_C-RRs8FYWX6KNdHiIq6iOaq3GDwa7iZ__xw3buzAtnrHh9FvY1x_4qotEXIpC0mnAw7_r8hFD964iZcgofFL3E8xwHnf1DoRJJY03Oi1hMuYaL4YfeDxZotBXWpomNvmt9gCz6yXYYy2vO6bT-XkzJG7GJ3Us--seI6WpFSeqXm8OJyYlgLrWK29CALQq1ZlG7sTzZqFb_lNTsO86w7bJjje5HltSa_Jq_SAS_jh_FK7yxGoatohedz454nXwZgjEocGLlI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent md:bg-gradient-to-r"></div>
+</div>
+<div class="flex-1 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-xl font-bold group-hover:text-electric-blue transition-colors">智能闪卡 V2.0</h3>
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] rounded border border-primary/20 font-label-md">SRS 系统</span>
+</div>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4">由您的个人知识图谱驱动的自适应复习引擎。利用神经间隔算法，学习复杂概念的速度提升 3 倍。</p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-4 mt-auto">
+<div class="flex gap-2 p-1 bg-surface-container-lowest rounded-lg border border-outline-variant/30">
+<button class="px-3 py-1 rounded text-[10px] font-label-md hover:bg-surface-variant transition-colors">简单</button>
+<button class="px-3 py-1 rounded text-[10px] font-label-md bg-electric-blue text-surface font-bold">中等</button>
+<button class="px-3 py-1 rounded text-[10px] font-label-md hover:bg-surface-variant transition-colors">困难</button>
+</div>
+<button class="bg-surface border border-electric-blue text-electric-blue hover:bg-electric-blue hover:text-surface font-bold py-2 px-6 rounded-lg text-sm transition-all flex items-center gap-2 group-active:scale-95">
+                                        开启模块
+                                        <span class="material-symbols-outlined text-sm">bolt</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Knowledge Monopoly -->
+<div class="glass-panel group rounded-2xl overflow-hidden hover:border-warning-amber/40 transition-all duration-300 flex flex-col md:flex-row">
+<div class="w-full md:w-64 h-48 md:h-auto overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A 3D isometric representation of a virtual game board that resembles a complex circuit board. Holographic data towers rise from the board, illuminated by golden and amber light paths, representing different knowledge domains in a high-tech strategy game environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChDzI7h3rZBXtC2XEmqjYLmqJxWyCW-fzBawKjRuT6wTIUCeczRNFztbTdJkIpvF0qR5oaa9l6Sl-FEkhWw80rdNnPR5e9f6MTQIIw9TEJLsrwsUDWED1Um61XoW8UdoosygrKLrCns13fWehB7_qTqF1q2m-oiuVJm6sDUApfGNBFQsZcSiskfYfAzHVcVtQZsuO2piGjRRyaSNyzENWgp-3Ypn-smsGHNifLHRIcNITe2OvNlN4P5pUYpWHKlsE0MIGZY_0UxOgc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent md:bg-gradient-to-r"></div>
+</div>
+<div class="flex-1 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-xl font-bold group-hover:text-warning-amber transition-colors">知识大富翁 V2.0</h3>
+<span class="px-2 py-0.5 bg-warning-amber/10 text-warning-amber text-[10px] rounded border border-warning-amber/20 font-label-md">策略</span>
+</div>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4">在多元知识领域投入您的认知积分。建立概念帝国，并抵御 AI 驱动的市场波动。</p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-4 mt-auto">
+<div class="flex gap-2 p-1 bg-surface-container-lowest rounded-lg border border-outline-variant/30">
+<button class="px-3 py-1 rounded text-[10px] font-label-md bg-warning-amber text-surface font-bold">简单</button>
+<button class="px-3 py-1 rounded text-[10px] font-label-md hover:bg-surface-variant transition-colors">中等</button>
+<button class="px-3 py-1 rounded text-[10px] font-label-md hover:bg-surface-variant transition-colors">困难</button>
+</div>
+<button class="bg-surface border border-warning-amber text-warning-amber hover:bg-warning-amber hover:text-surface font-bold py-2 px-6 rounded-lg text-sm transition-all flex items-center gap-2 group-active:scale-95">
+                                        开始对战
+                                        <span class="material-symbols-outlined text-sm">stadium</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Concept Match -->
+<div class="glass-panel group rounded-2xl overflow-hidden hover:border-mint-evolution/40 transition-all duration-300 flex flex-col md:flex-row">
+<div class="w-full md:w-64 h-48 md:h-auto overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Minimalist abstract nodes and connections in a dark void. Glowing mint green lines connect various glowing icons representing logic, code, and philosophy. The lighting is soft and atmospheric, highlighting a clean, intellectual match-style game aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhSfqTk0dwrzCU1UomUtR86k2YKHRHQsIyUBRDOZM4mDhkqHmDdzfTUgVk4_TqlNJI1puGK7KEy3_ZER2w3FDfFpALumlw8Inx_ZtdVHNd_cryks3lLaX1YmAb2TyUbYo7HC9XTgDLN2z07jAA1thF4wmg9qJM5W-RGDDfKDSqzq3VN8nQK8c4VC9LOGY8TC0N3Y4AtyV7IdcMOXh-DsQdNP1s90x4OG58V4gGPWvKdO8PuhMqncHj0vrb1o3zFvaowldANijM93UW"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent md:bg-gradient-to-r"></div>
+</div>
+<div class="flex-1 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-xl font-bold group-hover:text-mint-evolution transition-colors">概念配对 V2.0</h3>
+<span class="px-2 py-0.5 bg-mint-evolution/10 text-mint-evolution text-[10px] rounded border border-mint-evolution/20 font-label-md">逻辑</span>
+</div>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-4">高速模式识别挑战。在看似无关的数据集之间建立语义桥梁，解锁深层见解。</p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-4 mt-auto">
+<div class="flex gap-2 p-1 bg-surface-container-lowest rounded-lg border border-outline-variant/30">
+<button class="px-3 py-1 rounded text-[10px] font-label-md hover:bg-surface-variant transition-colors">简单</button>
+<button class="px-3 py-1 rounded text-[10px] font-label-md hover:bg-surface-variant transition-colors">中等</button>
+<button class="px-3 py-1 rounded text-[10px] font-label-md bg-mint-evolution text-surface font-bold">困难</button>
+</div>
+<button class="bg-surface border border-mint-evolution text-mint-evolution hover:bg-mint-evolution hover:text-surface font-bold py-2 px-6 rounded-lg text-sm transition-all flex items-center gap-2 group-active:scale-95">
+                                        进入沙箱
+                                        <span class="material-symbols-outlined text-sm">extension</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Leaderboard & Recent Activity -->
+<aside class="lg:col-span-4 space-y-8">
+<!-- Global Leaderboard -->
+<div class="glass-panel rounded-2xl p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-md text-lg">排行榜</h3>
+<button class="text-electric-blue text-xs font-label-md uppercase tracking-wide hover:underline transition-all">查看全部</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 p-2 bg-surface-variant/20 rounded-xl border border-outline-variant/10">
+<div class="w-8 h-8 rounded-full bg-warning-amber flex items-center justify-center font-bold text-surface text-xs">1</div>
+<img class="w-10 h-10 rounded-lg object-cover" data-alt="A futuristic professional avatar of a scientist in a clean, dark room with subtle cyan highlights on a holographic screen in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuABljE0hBYyBBJr8DyyjjEud7EiqOANY1K461fMrwXOcyg-HkGxgokZYB1zQVESqUREBSvTW1uRUhBt9l6b-wQK3DaUbKfaQGkQwMwr-2ixuMJHW8gVC46e0D8SIqD4hPAG9871i0bx7GOJYHuK9Keo_aYcie_mpSK9g72534_82nTSmTNp53CMKq_4xZVnZjSyjx1_jxKStZ9uRoyjYrKdK1bLr0wkZA_ZCZH44RD7GmlVBtGQBOVvGcjAfVNMV5IG0ofporba0khf"/>
+<div class="flex-1">
+<p class="font-label-md text-sm">Elena_AI</p>
+<p class="text-[10px] text-on-surface-variant">42,500 XP</p>
+</div>
+<div class="text-warning-amber">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+</div>
+<div class="flex items-center gap-4 p-2 rounded-xl">
+<div class="w-8 h-8 rounded-full bg-on-surface-variant/20 flex items-center justify-center font-bold text-on-surface-variant text-xs">2</div>
+<img class="w-10 h-10 rounded-lg object-cover" data-alt="A digital portrait of a gamer with vibrant violet neon light illuminating one side of their face, set in a dark technological environment with minimalist lines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClhl3S-QcHWDXYY3hIobmwuBAijakhl416dWyGTEWN2qFZXVIZT9ssA8zNnGv16U1nak30BBBSi7wHVmnqBahgoe7rvkFvvQ0sKFYf7LGvezMRnKWcxaCksseM3kq6iupvJVYyJhAm5iNkv5B8dypXt-5yivcH_55ne7zJXLPdWNEZkBBQf7ecIndPCuFa2MSiC5nw1Phe1qMrNgR5u3KzVCu12xrjMczofrXjz_Amnj-heXBu9_4WUI7di_OWZ6kM62FWUwklr__Q"/>
+<div class="flex-1">
+<p class="font-label-md text-sm">QuantumCoder</p>
+<p class="text-[10px] text-on-surface-variant">38,120 XP</p>
+</div>
+<div class="text-on-surface-variant">
+<span class="material-symbols-outlined text-lg">military_tech</span>
+</div>
+</div>
+<div class="flex items-center gap-4 p-2 rounded-xl">
+<div class="w-8 h-8 rounded-full bg-on-surface-variant/20 flex items-center justify-center font-bold text-on-surface-variant text-xs">3</div>
+<img class="w-10 h-10 rounded-lg object-cover" data-alt="A portrait of an architect in a virtual studio space, with clean white light and geometric shadows, creating a sophisticated and professional tech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzitVd9yi4nwUmY0JbR9QssrhMRFimOHBoUzk-B9MZaxf4vMfLn8RUCdDj_dZb8bO9Ut1Ri4-1TEET5wLKx1MVluicFlp2wJFLKEWmLEXLp9nxFDibqktFmpporgGt0AfbB7R4MRyeoFXcQo99y8qVzuhP8knx5l8l0DR0QUpq5kzGS8fktK9XuBSjg2j-w3Njblnq3TLVQ00fZkDXzghWEa0bchT4VYWlqA5MCYYdnQpvyvdvUxk3U3_Ml-iH-bFJS-Jahya8hSUS"/>
+<div class="flex-1">
+<p class="font-label-md text-sm">Sarah_Logic</p>
+<p class="text-[10px] text-on-surface-variant">35,900 XP</p>
+</div>
+<div class="text-on-surface-variant">
+<span class="material-symbols-outlined text-lg">military_tech</span>
+</div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-outline-variant/30">
+<div class="flex items-center gap-4 p-2 bg-electric-blue/10 rounded-xl border border-electric-blue/20">
+<div class="w-8 h-8 rounded-full bg-electric-blue flex items-center justify-center font-bold text-surface text-xs">12</div>
+<div class="flex-1">
+<p class="font-label-md text-sm">您 (Alex Chen)</p>
+<p class="text-[10px] text-electric-blue">继续努力，距离前 10 还差 500 XP</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent High Scores -->
+<div class="glass-panel rounded-2xl p-6">
+<h3 class="font-headline-md text-lg mb-6">最近个人最佳</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center group">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-electric-blue"></div>
+<span class="text-sm font-label-md">智能闪卡 V2</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-sm font-bold text-on-surface">2,450 分</span>
+<span class="text-[10px] text-on-surface-variant">2小时前</span>
+</div>
+</div>
+<div class="flex justify-between items-center group">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-mint-evolution"></div>
+<span class="text-sm font-label-md">概念配对</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-sm font-bold text-on-surface">1,820 分</span>
+<span class="text-[10px] text-on-surface-variant">昨天</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Achievements Snippet -->
+<div class="glass-panel rounded-2xl p-6 bg-gradient-to-br from-surface-variant/20 to-transparent">
+<h3 class="font-headline-md text-lg mb-4">里程碑</h3>
+<div class="grid grid-cols-4 gap-2">
+<div class="aspect-square rounded-lg bg-surface-container-highest flex items-center justify-center text-warning-amber group relative cursor-pointer" title="7日连胜">
+<span class="material-symbols-outlined text-xl">local_fire_department</span>
+</div>
+<div class="aspect-square rounded-lg bg-surface-container-highest flex items-center justify-center text-primary group relative cursor-pointer" title="最强大脑">
+<span class="material-symbols-outlined text-xl">psychology</span>
+</div>
+<div class="aspect-square rounded-lg bg-surface-container-highest flex items-center justify-center text-mint-evolution group relative cursor-pointer" title="早期探索者">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="aspect-square rounded-lg bg-surface-container-highest/50 flex items-center justify-center text-on-surface-variant/30 group relative cursor-not-allowed">
+<span class="material-symbols-outlined text-xl">lock</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full ml-64 p-4 border-t border-outline-variant bg-deep-charcoal flex justify-between items-center max-w-[calc(100%-16rem)] px-margin-lg z-10">
+<div class="flex items-center gap-4">
+<span class="font-label-sm text-label-sm text-on-surface-variant">智衍进化系统 v2.4</span>
+<div class="h-4 w-px bg-outline-variant"></div>
+<div class="flex gap-4">
+<span class="font-label-sm text-label-sm text-mint-evolution flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-mint-evolution animate-pulse"></span>
+                    RAGFlow: 在线
+                </span>
+<span class="font-label-sm text-label-sm text-mint-evolution flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-mint-evolution"></span>
+                    Milvus: 运行中
+                </span>
+<span class="font-label-sm text-label-sm text-mint-evolution flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-mint-evolution"></span>
+                    RabbitMQ: 稳定
+                </span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">文档中心</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">API 密钥</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">技术支持</a>
+</div>
+</footer>
+</div>
+<!-- Background Atmospheric Effect -->
+<div class="fixed inset-0 pointer-events-none z-[-1] opacity-40"></div>
+<script>
+    // Simple micro-interactions
+    document.querySelectorAll('.glass-panel').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
+    // Difficulty Selector Logic
+    document.querySelectorAll('.flex.gap-2.p-1.bg-surface-container-lowest').forEach(container => {
+        const buttons = container.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                buttons.forEach(b => {
+                    b.classList.remove('bg-electric-blue', 'bg-warning-amber', 'bg-mint-evolution', 'text-surface', 'font-bold');
+                    b.classList.add('hover:bg-surface-variant');
+                });
+                
+                const color = container.closest('.glass-panel').classList.contains('hover:border-electric-blue/40') ? 'bg-electric-blue' :
+                              container.closest('.glass-panel').classList.contains('hover:border-warning-amber/40') ? 'bg-warning-amber' : 'bg-mint-evolution';
+                
+                btn.classList.add(color, 'text-surface', 'font-bold');
+                btn.classList.remove('hover:bg-surface-variant');
+            });
+        });
+    });
+</script>
+</body></html>

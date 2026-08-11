@@ -1,0 +1,1917 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>知识大富翁</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #303a34;
+      --muted: #69756d;
+      --line: #aeb9ae;
+      --paper: #eee4c9;
+      --surface: #faf8ed;
+      --soft: #dce6dc;
+      --teal: #2c7467;
+      --red: #a84838;
+      --gold: #c3922c;
+      --shadow: 0 14px 34px rgba(32, 52, 60, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { min-height: 100%; }
+
+    body {
+      margin: 0;
+      background: #dfe7df;
+      color: var(--ink);
+      font-family: Inter, "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    button, input, select { font: inherit; }
+
+    button { cursor: pointer; }
+
+    button:disabled { cursor: not-allowed; opacity: .48; }
+
+    .app {
+      width: min(1200px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 20px 0 32px;
+    }
+
+    .topbar {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+      padding: 0 4px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand { min-width: 0; }
+
+    .brand span {
+      display: block;
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      margin: 3px 0 0;
+      font-family: Georgia, "Microsoft YaHei", serif;
+      font-size: 25px;
+      letter-spacing: 0;
+    }
+
+    .back-link,
+    .button {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: white;
+    }
+
+    .button.danger {
+      border-color: var(--red);
+      background: var(--red);
+      color: white;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(720px, 1fr) 300px;
+      align-items: start;
+      gap: 18px;
+    }
+
+    .board-wrap {
+      min-width: 0;
+      padding: 12px;
+      border: 2px solid #5f685c;
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .board {
+      aspect-ratio: 7 / 6;
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-rows: repeat(6, minmax(0, 1fr));
+      gap: 5px;
+    }
+
+    .space {
+      min-width: 0;
+      min-height: 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      overflow: hidden;
+      padding: 11px 5px 5px;
+      border: 1px solid #aebfbc;
+      border-radius: 4px;
+      background: var(--surface);
+      box-shadow: inset 0 0 0 2px rgba(95, 104, 92, .06);
+      text-align: center;
+    }
+
+    .space.active {
+      outline: 3px solid var(--gold);
+      outline-offset: -3px;
+    }
+
+    .space-strip {
+      height: 9px;
+      position: absolute;
+      inset: 0 0 auto;
+      background: var(--space-color, #9aacaa);
+    }
+
+    .space-icon { font-size: 20px; line-height: 1; }
+
+    .space-name {
+      max-width: 100%;
+      font-size: 11px;
+      font-weight: 850;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .space-meta {
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.2;
+    }
+
+    .space-owner {
+      max-width: calc(100% - 8px);
+      position: absolute;
+      right: 4px;
+      top: 12px;
+      overflow: hidden;
+      padding: 2px 4px;
+      border-radius: 3px;
+      color: white;
+      font-size: 8px;
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tokens {
+      min-height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      margin-top: 2px;
+    }
+
+    .token {
+      width: 22px;
+      height: 22px;
+      display: inline-grid;
+      place-items: center;
+      flex: none;
+      border: 2px solid var(--player-color);
+      border-radius: 50%;
+      background: #fffaf0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .28);
+      font-size: 15px;
+      font-style: normal;
+      line-height: 1;
+    }
+
+    .board-center {
+      min-width: 0;
+      grid-area: 2 / 2 / 6 / 7;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+      padding: 20px;
+      border: 2px solid #315d5a;
+      border-radius: 6px;
+      background: #dfeae5;
+      background-image: linear-gradient(rgba(49, 93, 90, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(49, 93, 90, .045) 1px, transparent 1px);
+      background-size: 14px 14px;
+    }
+
+    .turn-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(49, 93, 90, .35);
+    }
+
+    .turn-player {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .turn-token {
+      width: 34px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      flex: none;
+      border: 3px solid var(--player-color);
+      border-radius: 50%;
+      background: #fffaf0;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+      font-size: 23px;
+      line-height: 1;
+    }
+
+    .turn-player small,
+    .turn-player strong { display: block; }
+
+    .turn-player small { color: var(--muted); font-size: 9px; }
+
+    .turn-player strong { margin-top: 2px; font-size: 17px; }
+
+    .turn-cash { color: var(--teal); font-size: 17px; }
+
+    .center-content {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      text-align: center;
+    }
+
+    .center-content span {
+      color: var(--red);
+      font-size: 10px;
+      font-weight: 850;
+    }
+
+    .center-content h2 {
+      margin: 4px 0;
+      font-family: Georgia, "Microsoft YaHei", serif;
+      font-size: 26px;
+      letter-spacing: 0;
+    }
+
+    .center-content p {
+      max-width: 440px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .dice-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0 12px;
+    }
+
+    .die {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--red);
+      font-size: 30px;
+      font-weight: 900;
+      box-shadow: 4px 4px 0 rgba(32, 52, 60, .18);
+    }
+
+    .controls {
+      flex-wrap: wrap;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(49, 93, 90, .35);
+    }
+
+    .player-rolls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .player-roll-button {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .player-roll-button.current {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: white;
+      box-shadow: 3px 3px 0 rgba(48, 58, 52, .18);
+    }
+
+    .player-roll-animal {
+      width: 25px;
+      height: 25px;
+      display: inline-grid;
+      place-items: center;
+      flex: none;
+      border: 2px solid var(--player-color);
+      border-radius: 50%;
+      background: #fffaf0;
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .sidebar {
+      display: grid;
+      gap: 14px;
+    }
+
+    .panel {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: 0 8px 24px rgba(32, 52, 60, .07);
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 14px;
+    }
+
+    .player-list { display: grid; gap: 9px; }
+
+    .player-card {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fbfcf9;
+    }
+
+    .player-card.current { border-color: var(--teal); box-shadow: inset 3px 0 var(--teal); }
+
+    .player-card.bankrupt { opacity: .48; }
+
+    .player-summary {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .player-animal {
+      width: 27px;
+      height: 27px;
+      display: inline-grid;
+      place-items: center;
+      border: 2px solid var(--player-color);
+      border-radius: 50%;
+      background: #fffaf0;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .player-summary strong {
+      overflow: hidden;
+      font-size: 12px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .player-summary b { color: var(--teal); font-size: 12px; }
+
+    .property-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 7px;
+    }
+
+    .property-chip {
+      padding: 3px 5px;
+      border-left: 5px solid var(--property-color);
+      border-radius: 3px;
+      background: var(--soft);
+      color: var(--muted);
+      font-size: 8px;
+    }
+
+    .empty-property { color: var(--muted); font-size: 9px; }
+
+    .log-list {
+      max-height: 330px;
+      display: grid;
+      gap: 8px;
+      overflow: auto;
+    }
+
+    .log-item {
+      padding: 0 0 8px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .log-item strong { color: var(--ink); }
+
+    .setup {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      text-align: center;
+    }
+
+    .setup h2 { margin: 0; font-size: 22px; }
+
+    .setup > p { margin: 6px 0 16px; color: var(--muted); font-size: 11px; }
+
+    .setup-form { width: min(360px, 100%); display: grid; gap: 9px; }
+
+    .field { display: grid; grid-template-columns: 92px 1fr; align-items: center; gap: 8px; text-align: left; }
+
+    .field label { color: var(--muted); font-size: 11px; font-weight: 750; }
+
+    .field input,
+    .field select {
+      width: 100%;
+      min-height: 38px;
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      z-index: 50;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(27, 44, 50, .48);
+    }
+
+    .modal-backdrop[hidden] { display: none; }
+
+    .modal {
+      width: min(520px, 100%);
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: 0 24px 70px rgba(20, 34, 39, .28);
+    }
+
+    .modal-eyebrow {
+      color: var(--teal);
+      font-size: 10px;
+      font-weight: 850;
+    }
+
+    .modal h2 { margin: 5px 0 8px; font-size: 21px; }
+
+    .modal-body { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.65; white-space: pre-line; }
+
+    .modal-options { display: grid; gap: 8px; margin-top: 17px; }
+
+    .modal-options button {
+      min-height: 46px;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #f7faf8;
+      color: var(--ink);
+      text-align: left;
+    }
+
+    .modal-options button:hover { border-color: var(--teal); }
+
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+
+    /* Cartoon board skin inspired by casual Monopoly-style web games. */
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: #5ecdf7 url("/monopoly-assets/cartoon-sky.svg") center / cover fixed no-repeat;
+      color: #243052;
+      font-family: "Microsoft YaHei", Inter, Arial, sans-serif;
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      content: "";
+      background:
+        radial-gradient(circle at 18% 14%, rgba(255, 255, 255, .68), transparent 20%),
+        linear-gradient(180deg, rgba(21, 151, 239, .05), rgba(70, 180, 90, .2));
+      pointer-events: none;
+    }
+
+    .app {
+      width: min(1400px, calc(100% - 28px));
+      padding-top: 14px;
+    }
+
+    .topbar {
+      min-height: 58px;
+      margin-bottom: 10px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 20px;
+      background: rgba(34, 114, 205, .58);
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .28), 0 8px 24px rgba(29, 83, 145, .22);
+      color: #fff;
+      backdrop-filter: blur(7px);
+    }
+
+    .brand span,
+    .brand h1,
+    .back-link {
+      color: #fff;
+      text-shadow: 0 2px 0 rgba(31, 86, 151, .45);
+    }
+
+    .brand h1 {
+      font-family: "Microsoft YaHei", Inter, Arial, sans-serif;
+      font-weight: 950;
+    }
+
+    .back-link,
+    .button,
+    .player-roll-button,
+    .modal-options button {
+      border: 2px solid #5f4aa5;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #fff7c9, #ffb443 58%, #e17623);
+      color: #fff;
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, .62), 0 4px 0 #7d3f13, 0 8px 16px rgba(31, 36, 92, .25);
+      font-weight: 950;
+      text-shadow: 0 2px 0 rgba(46, 35, 110, .55);
+    }
+
+    .button.primary,
+    .player-roll-button.current,
+    .modal-options button:hover {
+      border-color: #294d93;
+      background: linear-gradient(180deg, #7df6ff, #2b91ff 58%, #1361d1);
+      color: #fff;
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, .72), 0 4px 0 #144b99, 0 10px 20px rgba(19, 97, 209, .34);
+    }
+
+    .layout {
+      grid-template-columns: minmax(760px, 1fr) 270px;
+      gap: 14px;
+    }
+
+    .board-wrap {
+      position: relative;
+      padding: clamp(8px, 1vw, 14px);
+      border: 0;
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, .34), rgba(255, 255, 255, .08)),
+        rgba(66, 166, 230, .08);
+      box-shadow: 0 18px 45px rgba(26, 75, 144, .26);
+      backdrop-filter: blur(2px);
+    }
+
+    .board-wrap::before {
+      position: absolute;
+      inset: 12% 17% 20% 28%;
+      z-index: 0;
+      content: "";
+      background: url("/monopoly-assets/cartoon-sky.svg") center / cover no-repeat;
+      opacity: .72;
+      clip-path: polygon(50% 18%, 58% 6%, 72% 4%, 84% 13%, 91% 29%, 88% 47%, 76% 64%, 50% 91%, 24% 64%, 12% 47%, 9% 29%, 16% 13%, 28% 4%, 42% 6%);
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, .85));
+      pointer-events: none;
+    }
+
+    .board {
+      position: relative;
+      z-index: 1;
+      gap: clamp(3px, .45vw, 7px);
+      padding: clamp(3px, .45vw, 7px);
+      border: 3px solid rgba(49, 47, 126, .72);
+      border-radius: 18px;
+      background: rgba(46, 56, 127, .32);
+      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .22), 0 12px 24px rgba(29, 53, 117, .25);
+    }
+
+    .space {
+      gap: 1px;
+      padding: 8px 4px 5px;
+      border: 2px solid rgba(70, 48, 133, .85);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, transparent 10px, rgba(255, 255, 255, .18) 10px 12px, transparent 12px),
+        linear-gradient(225deg, transparent 10px, rgba(255, 255, 255, .2) 10px 12px, transparent 12px),
+        linear-gradient(180deg, #aa76ed, #7252bf);
+      box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, .58),
+        inset 0 -4px 0 rgba(52, 37, 104, .42),
+        0 3px 0 rgba(40, 31, 91, .8);
+      color: #fff;
+      text-shadow: 0 2px 0 rgba(45, 30, 100, .55);
+    }
+
+    .space::before {
+      position: absolute;
+      inset: 11px;
+      content: "";
+      border: 2px solid rgba(255, 255, 255, .5);
+      transform: rotate(45deg);
+      pointer-events: none;
+    }
+
+    .space.active {
+      outline: 4px solid #fff45a;
+      outline-offset: -4px;
+      filter: drop-shadow(0 0 12px rgba(255, 244, 90, .88));
+    }
+
+    .space-strip {
+      height: 8px;
+      border-radius: 6px 6px 0 0;
+      background: var(--space-color, #8b61d2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55);
+    }
+
+    .space-icon {
+      z-index: 1;
+      min-width: 32px;
+      min-height: 32px;
+      display: inline-grid;
+      place-items: center;
+      margin-bottom: 1px;
+      border-radius: 9px;
+      background: rgba(255, 255, 255, .2);
+      color: #fff;
+      font-size: clamp(16px, 1.55vw, 25px);
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .space-name {
+      z-index: 1;
+      font-size: clamp(10px, .9vw, 13px);
+      font-weight: 950;
+    }
+
+    .space-meta {
+      z-index: 1;
+      color: rgba(255, 255, 255, .9);
+      font-size: clamp(8px, .7vw, 10px);
+      font-weight: 800;
+    }
+
+    .space-property {
+      background:
+        linear-gradient(135deg, transparent 10px, rgba(255, 255, 255, .2) 10px 12px, transparent 12px),
+        linear-gradient(225deg, transparent 10px, rgba(255, 255, 255, .2) 10px 12px, transparent 12px),
+        linear-gradient(180deg, #d487ff, #7c55d1);
+    }
+
+    .space-start,
+    .space-gotoStart {
+      background: linear-gradient(180deg, #a7f2a0, #55ba64 58%, #26844b);
+    }
+
+    .space-tax {
+      background: linear-gradient(180deg, #ff8f85, #e95559 58%, #b83343);
+    }
+
+    .space-chance {
+      background: linear-gradient(180deg, #fff171, #f0a826 58%, #d16e21);
+    }
+
+    .space-fate {
+      background: linear-gradient(180deg, #d2f8ff, #6ebaff 58%, #3a73c7);
+    }
+
+    .space-jail {
+      background: linear-gradient(180deg, #aab0bb, #6d7382 58%, #3e4250);
+    }
+
+    .space-owner,
+    .token,
+    .turn-token,
+    .player-animal,
+    .player-roll-animal {
+      border-color: #fff;
+      background: linear-gradient(180deg, #fff, #e9efff);
+      box-shadow: 0 2px 0 rgba(57, 42, 117, .45), 0 0 0 2px var(--player-color);
+    }
+
+    .board-center {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(14px, 1.6vw, 24px);
+      border: 3px solid rgba(50, 58, 132, .72);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .28), rgba(168, 228, 255, .16));
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .5);
+      backdrop-filter: blur(1px);
+    }
+
+    .board-center::before {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background:
+        radial-gradient(circle at 28% 88%, rgba(255, 113, 185, .32), transparent 18%),
+        radial-gradient(circle at 68% 34%, rgba(255, 255, 255, .34), transparent 22%),
+        linear-gradient(rgba(66, 118, 181, .09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(66, 118, 181, .09) 1px, transparent 1px);
+      background-size: auto, 18px 18px, 18px 18px;
+      pointer-events: none;
+    }
+
+    .turn-head,
+    .controls,
+    .center-content,
+    .setup {
+      position: relative;
+      z-index: 1;
+    }
+
+    .turn-head,
+    .controls {
+      border-color: rgba(69, 73, 154, .22);
+    }
+
+    .center-content h2,
+    .setup h2 {
+      color: #27315a;
+      font-family: "Microsoft YaHei", Inter, Arial, sans-serif;
+      font-weight: 950;
+      text-shadow: 0 2px 0 rgba(255, 255, 255, .85);
+    }
+
+    .center-content span {
+      color: #8049d9;
+      font-weight: 950;
+    }
+
+    .center-content p,
+    .setup p {
+      color: #3e5375;
+      font-weight: 750;
+    }
+
+    .dice-row {
+      align-items: center;
+      gap: 16px;
+      margin: 18px 0 10px;
+    }
+
+    .hero-players {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      width: min(430px, 100%);
+      margin: 16px auto 4px;
+    }
+
+    .hero-player-card {
+      min-width: 0;
+      padding: 12px 10px;
+      border: 2px solid rgba(83, 72, 150, .5);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .72), rgba(219, 239, 255, .42));
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, .7);
+    }
+
+    .hero-player-card.current {
+      border-color: #ffeb4a;
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, .75), 0 0 16px rgba(255, 235, 74, .64);
+    }
+
+    .hero-avatar {
+      width: clamp(56px, 5vw, 82px);
+      height: clamp(70px, 6.4vw, 100px);
+      display: block;
+      margin: 0 auto 4px;
+      background: var(--avatar) center bottom / contain no-repeat;
+      filter: drop-shadow(0 6px 6px rgba(62, 55, 126, .22));
+    }
+
+    .hero-player-card strong,
+    .hero-player-card small {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .hero-player-card strong {
+      color: #28335e;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .hero-player-card small {
+      color: #52698c;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .die {
+      width: clamp(56px, 5vw, 74px);
+      height: clamp(56px, 5vw, 74px);
+      border: 0;
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 35% 35%, #ff3b55 0 11%, transparent 12%),
+        radial-gradient(circle at 68% 68%, #2d3d5f 0 8%, transparent 9%),
+        linear-gradient(145deg, #fff, #ffdce1);
+      color: #2b3761;
+      box-shadow: inset 0 3px 0 rgba(255, 255, 255, .95), 0 5px 0 #bf90a1, 0 12px 20px rgba(86, 53, 116, .28);
+      font-size: 0;
+      transform: rotate(-10deg);
+    }
+
+    .die::after {
+      content: attr(data-value);
+      font-size: clamp(20px, 2vw, 30px);
+      font-weight: 950;
+      text-shadow: 0 1px 0 #fff;
+    }
+
+    .die.rolling {
+      animation: die-roll .72s cubic-bezier(.2, .82, .22, 1) both;
+    }
+
+    .die.rolling::after {
+      animation: die-number-pop .18s steps(2, end) infinite;
+    }
+
+    @keyframes die-roll {
+      0% { transform: translateY(0) rotate(-10deg) scale(1); }
+      18% { transform: translateY(-18px) rotate(42deg) scale(1.08); }
+      36% { transform: translateY(4px) rotate(118deg) scale(.96); }
+      54% { transform: translateY(-10px) rotate(226deg) scale(1.04); }
+      74% { transform: translateY(2px) rotate(318deg) scale(.98); }
+      100% { transform: translateY(0) rotate(-10deg) scale(1); }
+    }
+
+    @keyframes die-number-pop {
+      0%, 100% { transform: scale(1); opacity: .85; }
+      50% { transform: scale(1.16); opacity: 1; }
+    }
+
+    .sidebar {
+      gap: 10px;
+    }
+
+    .panel {
+      border: 2px solid rgba(54, 56, 135, .62);
+      border-radius: 18px;
+      background: rgba(238, 249, 255, .78);
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, .68), 0 8px 22px rgba(44, 74, 142, .2);
+      backdrop-filter: blur(6px);
+    }
+
+    .panel h2 {
+      color: #27315a;
+      font-weight: 950;
+    }
+
+    .player-card {
+      border: 2px solid rgba(113, 87, 184, .42);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .7);
+    }
+
+    .player-card.current {
+      border-color: #4aa1ff;
+      box-shadow: inset 4px 0 #4aa1ff, 0 0 16px rgba(74, 161, 255, .3);
+    }
+
+    .property-chip {
+      border-left-width: 8px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .7);
+      color: #3e5375;
+      font-weight: 850;
+    }
+
+    .modal-backdrop {
+      background: rgba(23, 42, 111, .45);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal {
+      border: 3px solid #5f4aa5;
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fffaf0, #ffe1b5);
+      box-shadow: inset 0 3px 0 rgba(255, 255, 255, .75), 0 22px 70px rgba(28, 43, 112, .42);
+    }
+
+    .monopoly-hud {
+      position: fixed;
+      top: 16px;
+      right: 18px;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+      font-weight: 950;
+      pointer-events: none;
+      text-shadow: 0 3px 0 #167522, 0 0 8px rgba(255, 255, 255, .55);
+    }
+
+    .monopoly-hud span {
+      padding: 4px 12px;
+      border: 2px solid rgba(255, 255, 255, .75);
+      border-radius: 999px;
+      background: linear-gradient(180deg, #7cff7a, #20b234);
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, .55), 0 4px 0 rgba(16, 95, 31, .75);
+      font-size: 14px;
+    }
+
+    .monopoly-hud b {
+      color: #e9ff54;
+      font-size: clamp(22px, 2.4vw, 36px);
+      -webkit-text-stroke: 1px #13842a;
+    }
+
+    @media (max-width: 1040px) {
+      .app { width: min(820px, calc(100% - 24px)); }
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .app { width: calc(100% - 12px); padding-top: 8px; }
+      .topbar { min-height: 56px; }
+      .brand h1 { font-size: 19px; }
+      .board-wrap { overflow-x: auto; padding: 7px; }
+      .board { width: 700px; height: 600px; }
+      .board-center { padding: 14px; }
+      .sidebar { grid-template-columns: 1fr; }
+    }
+
+    body.embedded {
+      height: 100vh;
+      overflow: hidden;
+      background: #dfe7df;
+    }
+
+    body.embedded .app {
+      width: 100%;
+      height: 100vh;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    body.embedded .layout {
+      height: 100vh;
+      min-height: 0;
+      grid-template-columns: minmax(0, 1fr);
+      align-items: stretch;
+      gap: 0;
+      padding: clamp(8px, 1vw, 14px);
+      box-sizing: border-box;
+    }
+
+    body.embedded .board-wrap {
+      min-height: 0;
+      display: grid;
+      padding: clamp(8px, 1vw, 14px);
+      overflow: hidden;
+    }
+
+    body.embedded .board {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: auto;
+    }
+
+    body.embedded .board-center {
+      min-height: 0;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: clamp(6px, .8vh, 10px);
+      padding: clamp(10px, 1.2vh, 16px);
+    }
+
+    body.embedded .turn-head {
+      min-height: 0;
+      padding-bottom: clamp(4px, .65vh, 8px);
+    }
+
+    body.embedded .center-content {
+      min-height: 0;
+      align-content: center;
+      overflow: hidden;
+    }
+
+    body.embedded .center-content h2 {
+      margin: 2px 0;
+      font-size: clamp(22px, 2.1vw, 34px);
+    }
+
+    body.embedded .center-content p {
+      max-width: 620px;
+      font-size: clamp(10px, .72vw, 13px);
+      line-height: 1.35;
+    }
+
+    body.embedded .hero-players {
+      grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+      gap: clamp(6px, .7vw, 10px);
+      width: min(650px, 72%);
+      margin: clamp(8px, 1.1vh, 12px) auto 0;
+    }
+
+    body.embedded .hero-player-card {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-rows: auto auto auto;
+      align-items: center;
+      column-gap: 8px;
+      min-height: 70px;
+      padding: clamp(5px, .7vh, 8px) clamp(7px, .8vw, 10px);
+      text-align: left;
+    }
+
+    body.embedded .hero-avatar {
+      grid-row: 1 / 4;
+      width: clamp(42px, 3.3vw, 58px);
+      height: clamp(50px, 4vw, 70px);
+      margin: 0;
+    }
+
+    body.embedded .hero-player-card strong {
+      font-size: clamp(11px, .78vw, 13px);
+    }
+
+    body.embedded .hero-player-card small {
+      font-size: clamp(9px, .68vw, 11px);
+      line-height: 1.25;
+    }
+
+    body.embedded .dice-row {
+      gap: clamp(8px, .9vw, 14px);
+      margin: clamp(8px, 1.1vh, 12px) 0 clamp(2px, .5vh, 6px);
+    }
+
+    body.embedded .die {
+      width: clamp(46px, 3.8vw, 62px);
+      height: clamp(46px, 3.8vw, 62px);
+      border-radius: 13px;
+    }
+
+    body.embedded .controls {
+      min-height: 0;
+      gap: 6px;
+      padding-top: clamp(5px, .8vh, 9px);
+    }
+
+    body.embedded .player-roll-button,
+    body.embedded .button {
+      min-height: 34px;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    body.embedded .sidebar {
+      display: none;
+    }
+
+    body.embedded .panel {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.embedded .player-list,
+    body.embedded .log-list {
+      min-height: 0;
+      max-height: none;
+      overflow: auto;
+    }
+
+    body.embedded .topbar { display: none; }
+  </style>
+</head>
+<body>
+  <div class="monopoly-hud" aria-hidden="true"><span>游戏</span><b id="turnBadge">1 天</b></div>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span>KNOWLEDGE MONOPOLY</span><h1>知识大富翁</h1></div>
+      <a class="back-link" href="/games" aria-label="返回游戏中心">← 返回游戏中心</a>
+    </header>
+
+    <div class="layout">
+      <main class="board-wrap" aria-label="知识大富翁棋盘">
+        <section id="board" class="board">
+          <div id="boardCenter" class="board-center"></div>
+        </section>
+      </main>
+
+      <aside class="sidebar">
+        <section class="panel"><h2>玩家资产</h2><div id="playerList" class="player-list"></div></section>
+        <section class="panel"><h2>事件日志</h2><div id="logList" class="log-list" aria-live="polite"></div></section>
+      </aside>
+    </div>
+  </div>
+
+  <div id="modalBackdrop" class="modal-backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <span id="modalEyebrow" class="modal-eyebrow"></span>
+      <h2 id="modalTitle"></h2>
+      <p id="modalBody" class="modal-body"></p>
+      <div id="modalOptions" class="modal-options"></div>
+      <div id="modalActions" class="modal-actions"></div>
+    </section>
+  </div>
+
+  <script>
+    'use strict'
+
+    if (new URLSearchParams(window.location.search).get('embedded') === '1') {
+      document.body.classList.add('embedded')
+    }
+
+    const PLAYER_COLORS = ['#d64b3c', '#2678b8', '#3b8d5c', '#8b55a4']
+    const PLAYER_TOKENS = ['🦊', '🐼', '🐯', '🐸']
+    const GROUPS = {
+      brown: { name: '启蒙萌芽组', color: '#8b5a3c', price: 100, rent: 20 },
+      lightblue: { name: '语义冒险组', color: '#76b8d4', price: 140, rent: 28 },
+      pink: { name: '提示魔法组', color: '#d96e9e', price: 180, rent: 36 },
+      orange: { name: '笔记工坊组', color: '#e58a35', price: 220, rent: 44 },
+      red: { name: '模型飞船组', color: '#ca4a43', price: 260, rent: 52 },
+      yellow: { name: '智慧王国组', color: '#dfb82f', price: 300, rent: 60 },
+    }
+
+    const spaces = [
+      { type: 'start', name: '起点', icon: 'GO', meta: '经过 +200' },
+      property('brown', '概念幼儿园'), property('brown', '关键词集市'),
+      { type: 'chance', name: '机会', icon: '?', meta: '知识问答' },
+      property('lightblue', '向量滑梯'),
+      { type: 'tax', name: '缴税', icon: '¥', amount: 100, meta: '-100' },
+      property('lightblue', '语义泡泡屋'),
+      { type: 'fate', name: '命运', icon: '★', meta: '知识问答' },
+      property('pink', 'Prompt糖果店'), property('pink', 'Agent小剧场'),
+      { type: 'jail', name: '探视 / 监狱', icon: '▦', meta: '仅作探视' },
+      property('orange', '笔记炼金铺'),
+      { type: 'chance', name: '机会', icon: '?', meta: '知识问答' },
+      property('orange', '图谱侦探社'),
+      { type: 'fate', name: '命运', icon: '★', meta: '知识问答' },
+      property('red', '检索飞船港'), property('red', '模型训练营'),
+      { type: 'tax', name: '缴税', icon: '¥', amount: 150, meta: '-150' },
+      property('yellow', '知识城堡'), property('yellow', '灵感发射塔'),
+      { type: 'chance', name: '机会', icon: '?', meta: '知识问答' },
+      { type: 'gotoStart', name: '回到起点', icon: '↩', meta: '并领取 200' },
+    ]
+
+    const chanceCards = [
+      moneyCard('项目奖金到账，获得 120 元。', 120),
+      moneyCard('购买学习资料，支付 60 元。', -60),
+      moveCard('回到起点并领取经过奖金。', 0),
+      relativeCard('灵感迸发，前进 3 格。', 3),
+      relativeCard('复盘遗漏，后退 2 格。', -2),
+      moveCard('参加公开课，前往向量滑梯。', 4),
+      moveCard('参与知识共创，前往笔记炼金铺。', 11),
+      moneyCard('答题奖励，获得 50 元。', 50),
+      moneyCard('订阅专业数据库，支付 40 元。', -40),
+      { text: '向每位其他玩家支付 30 元协作费。', type: 'payEach', amount: 30 },
+      { text: '维护知识资产，每块地产支付 20 元。', type: 'repairs', amount: 20 },
+      { text: '前往探视 / 监狱格，不限制下一回合。', type: 'jail' },
+    ]
+
+    const fateCards = [
+      moneyCard('研究成果获奖，获得 180 元。', 180),
+      moneyCard('设备维修，支付 90 元。', -90),
+      moneyCard('获得社区赞助，获得 80 元。', 80),
+      relativeCard('学习计划提前，前进 2 格。', 2),
+      relativeCard('资料版本回退，后退 3 格。', -3),
+      moveCard('前往检索飞船港参加挑战。', 15),
+      moveCard('前往知识城堡进行成果展示。', 18),
+      moveCard('立即回到起点并领取奖金。', 0),
+      moneyCard('缴纳评审费用，支付 50 元。', -50),
+      { text: '每位其他玩家向你支付 25 元咨询费。', type: 'collectEach', amount: 25 },
+      { text: '知识资产升级，每块地产支付 15 元。', type: 'repairs', amount: 15 },
+      { text: '前往探视 / 监狱格，不限制下一回合。', type: 'jail' },
+    ]
+
+    const propertySpaces = spaces.filter((space) => space.type === 'property')
+    const validGroups = Object.keys(GROUPS).every((group) => propertySpaces.filter((space) => space.group === group).length === 2)
+    if (spaces.length !== 22 || propertySpaces.length !== 12 || !validGroups || chanceCards.length < 12 || fateCards.length < 12) {
+      throw new Error('知识大富翁规则数据不完整')
+    }
+
+    const fallbackQuestions = [
+      { topic: '知识检索', prompt: '向量检索主要用于解决什么问题？', options: ['寻找语义相似内容', '压缩图片文件', '生成随机密码', '统计网页颜色'], answer: '寻找语义相似内容' },
+      { topic: '嵌入模型', prompt: '嵌入模型通常将文本转换为什么？', options: ['向量表示', '音频波形', '数据库表', '压缩包'], answer: '向量表示' },
+      { topic: '混合检索', prompt: '混合检索通常结合哪两类信号？', options: ['关键词与语义', '图像与音频', '时间与地点', '密码与权限'], answer: '关键词与语义' },
+    ]
+
+    const board = document.getElementById('board')
+    const boardCenter = document.getElementById('boardCenter')
+    const playerList = document.getElementById('playerList')
+    const logList = document.getElementById('logList')
+    const turnBadge = document.getElementById('turnBadge')
+    const modalBackdrop = document.getElementById('modalBackdrop')
+    const modalEyebrow = document.getElementById('modalEyebrow')
+    const modalTitle = document.getElementById('modalTitle')
+    const modalBody = document.getElementById('modalBody')
+    const modalOptions = document.getElementById('modalOptions')
+    const modalActions = document.getElementById('modalActions')
+
+    let pack = loadPack()
+    let state = null
+    let dialogResolver = null
+
+    createBoard()
+    renderSetup()
+
+    function property(group, name) {
+      const config = GROUPS[group]
+      return { type: 'property', group, name, price: config.price, rent: config.rent, color: config.color }
+    }
+
+    function moneyCard(text, amount) { return { text, type: 'money', amount } }
+    function moveCard(text, target) { return { text, type: 'move', target } }
+    function relativeCard(text, steps) { return { text, type: 'relative', steps } }
+
+    function loadPack() {
+      try {
+        const value = JSON.parse(sessionStorage.getItem('zhiyan_monopoly_pack') || 'null')
+        if (value && Array.isArray(value.questions) && value.questions.length) return value
+      } catch (_) {}
+      return {
+        id: null,
+        title: '内置知识题组',
+        agent_note: '未检测到 Agent 题包，当前使用内置知识题目。',
+        questions: fallbackQuestions,
+      }
+    }
+
+    function createBoard() {
+      spaces.forEach((space, index) => {
+        const cell = document.createElement('article')
+        const position = boardPosition(index)
+        cell.className = `space space-${space.type}${space.group ? ` space-group-${space.group}` : ''}`
+        cell.dataset.index = String(index)
+        cell.style.gridRow = String(position.row)
+        cell.style.gridColumn = String(position.column)
+        cell.style.setProperty('--space-color', space.color || typeColor(space.type))
+
+        const strip = document.createElement('i')
+        strip.className = 'space-strip'
+        const icon = document.createElement('span')
+        icon.className = 'space-icon'
+        icon.textContent = space.icon || ''
+        const name = document.createElement('strong')
+        name.className = 'space-name'
+        name.textContent = space.name
+        const meta = document.createElement('small')
+        meta.className = 'space-meta'
+        meta.textContent = space.type === 'property' ? `售价 ${space.price} · 租金 ${space.rent}` : space.meta
+        const owner = document.createElement('span')
+        owner.className = 'space-owner'
+        const tokens = document.createElement('div')
+        tokens.className = 'tokens'
+        cell.append(strip, icon, name, meta, owner, tokens)
+        board.appendChild(cell)
+      })
+    }
+
+    function boardPosition(index) {
+      if (index <= 6) return { row: 1, column: index + 1 }
+      if (index <= 10) return { row: index - 5, column: 7 }
+      if (index <= 17) return { row: 6, column: 18 - index }
+      return { row: 23 - index, column: 1 }
+    }
+
+    function typeColor(type) {
+      return ({ start: '#2c8b69', chance: '#c99122', fate: '#77569b', tax: '#b44b3c', jail: '#60777d', gotoStart: '#2c8b69' })[type] || '#9aacaa'
+    }
+
+    function renderSetup() {
+      state = null
+      boardCenter.replaceChildren()
+      playerList.replaceChildren()
+      logList.replaceChildren()
+      if (turnBadge) turnBadge.textContent = '1 天'
+
+      const setup = document.createElement('section')
+      setup.className = 'setup'
+      const title = document.createElement('h2')
+      title.textContent = '创建本地对局'
+      const note = document.createElement('p')
+      note.textContent = `${pack.title} · 每位玩家初始资金 1500 元`
+      const form = document.createElement('div')
+      form.className = 'setup-form'
+      const countField = makeField('玩家数量')
+      const select = document.createElement('select')
+      ;[1, 2, 3, 4].forEach((count) => {
+        const option = document.createElement('option')
+        option.value = String(count)
+        option.textContent = `${count} 名玩家`
+        select.appendChild(option)
+      })
+      select.value = '2'
+      countField.appendChild(select)
+      form.appendChild(countField)
+      const names = document.createElement('div')
+      form.appendChild(names)
+      const start = document.createElement('button')
+      start.className = 'button primary'
+      start.textContent = '开始知识大富翁'
+      form.appendChild(start)
+      setup.append(title, note, form)
+      boardCenter.appendChild(setup)
+
+      function renderNames() {
+        names.replaceChildren()
+        for (let index = 0; index < Number(select.value); index += 1) {
+          const field = makeField(`玩家 ${index + 1}`)
+          const input = document.createElement('input')
+          input.maxLength = 12
+          input.value = `玩家 ${index + 1}`
+          input.dataset.playerName = String(index)
+          field.appendChild(input)
+          names.appendChild(field)
+        }
+      }
+      select.addEventListener('change', renderNames)
+      start.addEventListener('click', () => {
+        const playerNames = [...names.querySelectorAll('input')].map((input, index) => input.value.trim() || `玩家 ${index + 1}`)
+        startGame(playerNames)
+      })
+      renderNames()
+    }
+
+    function makeField(labelText) {
+      const field = document.createElement('label')
+      field.className = 'field'
+      const label = document.createElement('span')
+      label.textContent = labelText
+      field.appendChild(label)
+      return field
+    }
+
+    function startGame(names) {
+      state = {
+        players: names.map((name, index) => ({ id: index, name, color: PLAYER_COLORS[index], token: PLAYER_TOKENS[index], cash: 1500, position: 0, active: true })),
+        owners: Array(spaces.length).fill(null),
+        current: 0,
+        dice: [1],
+        diceAnimating: false,
+        rolling: false,
+        gameOver: false,
+        turn: 1,
+        logs: [],
+        quizCursor: 0,
+        actionDepth: 0,
+      }
+      addLog('系统', `${names.length} 名玩家进入对局，知识题包加载完成。`)
+      render()
+    }
+
+    function render() {
+      if (!state) return
+      if (turnBadge) turnBadge.textContent = `${state.turn} 天`
+      renderBoard()
+      renderCenter()
+      renderPlayers()
+      renderLogs()
+    }
+
+    function renderBoard() {
+      board.querySelectorAll('.space').forEach((cell, index) => {
+        const ownerBadge = cell.querySelector('.space-owner')
+        const tokens = cell.querySelector('.tokens')
+        const ownerId = state.owners[index]
+        cell.classList.toggle('active', state.players.some((player) => player.active && player.position === index))
+        ownerBadge.textContent = ''
+        ownerBadge.removeAttribute('style')
+        if (ownerId !== null) {
+          ownerBadge.textContent = state.players[ownerId].name
+          ownerBadge.style.background = state.players[ownerId].color
+        }
+        tokens.replaceChildren()
+        state.players.filter((player) => player.active && player.position === index).forEach((player) => {
+          const token = document.createElement('span')
+          token.className = 'token'
+          token.title = `${player.name} · ${player.token}`
+          token.setAttribute('aria-label', `${player.name}的棋子`)
+          token.style.setProperty('--player-color', player.color)
+          token.textContent = player.token
+          tokens.appendChild(token)
+        })
+      })
+    }
+
+    function renderCenter() {
+      const player = state.players[state.current]
+      boardCenter.replaceChildren()
+
+      const head = document.createElement('header')
+      head.className = 'turn-head'
+      const identity = document.createElement('div')
+      identity.className = 'turn-player'
+      const token = document.createElement('span')
+      token.className = 'turn-token'
+      token.style.setProperty('--player-color', player.color)
+      token.textContent = player.token
+      token.setAttribute('aria-hidden', 'true')
+      const name = document.createElement('div')
+      const caption = document.createElement('small')
+      caption.textContent = `第 ${state.turn} 回合 · 当前玩家`
+      const strong = document.createElement('strong')
+      strong.textContent = player.name
+      name.append(caption, strong)
+      identity.append(token, name)
+      const cash = document.createElement('strong')
+      cash.className = 'turn-cash'
+      cash.textContent = `¥ ${player.cash}`
+      head.append(identity, cash)
+
+      const content = document.createElement('div')
+      content.className = 'center-content'
+      const eyebrow = document.createElement('span')
+      eyebrow.textContent = 'AGENT KNOWLEDGE CHALLENGE'
+      const title = document.createElement('h2')
+      title.textContent = '掷骰探索知识版图'
+      const description = document.createElement('p')
+      description.textContent = '落地后先完成一道素材知识问答，再处理地产、税款或机会与命运事件。'
+      const heroPlayers = document.createElement('div')
+      heroPlayers.className = 'hero-players'
+      state.players.slice(0, 4).forEach((item, index) => {
+        const card = document.createElement('article')
+        card.className = 'hero-player-card'
+        card.classList.toggle('current', index === state.current && item.active)
+        card.style.setProperty('--avatar', `url("/monopoly-assets/${index % 2 === 0 ? 'avatar-princess.svg' : 'avatar-ninja.svg'}")`)
+        const avatar = document.createElement('span')
+        avatar.className = 'hero-avatar'
+        avatar.setAttribute('aria-hidden', 'true')
+        const nameLabel = document.createElement('strong')
+        nameLabel.textContent = item.name
+        const cashLabel = document.createElement('small')
+        cashLabel.textContent = `${item.cash} 金币`
+        const propertyLabel = document.createElement('small')
+        propertyLabel.textContent = `${spaces.filter((space, spaceIndex) => state.owners[spaceIndex] === index && space.type === 'property').length} 房屋`
+        card.append(avatar, nameLabel, cashLabel, propertyLabel)
+        heroPlayers.appendChild(card)
+      })
+      const dice = document.createElement('div')
+      dice.className = 'dice-row'
+      state.dice.slice(0, 1).forEach((value) => {
+        const die = document.createElement('b')
+        die.className = 'die'
+        die.classList.toggle('rolling', state.diceAnimating)
+        die.dataset.value = String(value)
+        die.textContent = String(value)
+        dice.appendChild(die)
+      })
+      content.append(eyebrow, title, description, heroPlayers, dice)
+
+      const controls = document.createElement('footer')
+      controls.className = 'controls'
+      const playerRolls = document.createElement('div')
+      playerRolls.className = 'player-rolls'
+      state.players.forEach((item, index) => {
+        const roll = document.createElement('button')
+        roll.className = 'player-roll-button'
+        roll.classList.toggle('current', index === state.current && item.active)
+        roll.disabled = state.rolling || state.gameOver || !item.active || index !== state.current
+        const marker = document.createElement('span')
+        marker.className = 'player-roll-animal'
+        marker.style.setProperty('--player-color', item.color)
+        marker.textContent = item.token
+        marker.setAttribute('aria-hidden', 'true')
+        const label = document.createElement('span')
+        label.textContent = state.rolling && index === state.current ? `${item.name} 行动中…` : `${item.name} 掷骰`
+        roll.append(marker, label)
+        roll.addEventListener('click', rollDice)
+        playerRolls.appendChild(roll)
+      })
+      const restart = document.createElement('button')
+      restart.className = 'button'
+      restart.textContent = '重新开始'
+      restart.addEventListener('click', confirmRestart)
+      controls.append(playerRolls, restart)
+      boardCenter.append(head, content, controls)
+    }
+
+    function renderPlayers() {
+      playerList.replaceChildren()
+      state.players.forEach((player, index) => {
+        const card = document.createElement('article')
+        card.className = 'player-card'
+        card.classList.toggle('current', index === state.current && player.active)
+        card.classList.toggle('bankrupt', !player.active)
+        const summary = document.createElement('div')
+        summary.className = 'player-summary'
+        const token = document.createElement('span')
+        token.className = 'player-animal'
+        token.style.setProperty('--player-color', player.color)
+        token.textContent = player.token
+        token.setAttribute('aria-hidden', 'true')
+        const name = document.createElement('strong')
+        name.textContent = player.active ? player.name : `${player.name}（已破产）`
+        const cash = document.createElement('b')
+        cash.textContent = `¥${player.cash}`
+        summary.append(token, name, cash)
+        const list = document.createElement('div')
+        list.className = 'property-list'
+        const owned = spaces.map((space, spaceIndex) => ({ space, spaceIndex })).filter((item) => state.owners[item.spaceIndex] === index)
+        if (!owned.length) {
+          const empty = document.createElement('span')
+          empty.className = 'empty-property'
+          empty.textContent = '暂无地产'
+          list.appendChild(empty)
+        } else {
+          owned.forEach(({ space }) => {
+            const chip = document.createElement('span')
+            chip.className = 'property-chip'
+            chip.style.setProperty('--property-color', space.color)
+            chip.textContent = `${space.name} · 租 ${effectiveRent(space, index)}`
+            list.appendChild(chip)
+          })
+        }
+        card.append(summary, list)
+        playerList.appendChild(card)
+      })
+    }
+
+    function renderLogs() {
+      logList.replaceChildren()
+      state.logs.slice(0, 9).forEach((entry) => {
+        const item = document.createElement('p')
+        item.className = 'log-item'
+        const who = document.createElement('strong')
+        who.textContent = `${entry.who}：`
+        item.append(who, document.createTextNode(entry.text))
+        logList.appendChild(item)
+      })
+    }
+
+    function addLog(who, text) {
+      state.logs.unshift({ who, text })
+      renderLogs()
+    }
+
+    async function rollDice() {
+      if (!state || state.rolling || state.gameOver) return
+      const player = state.players[state.current]
+      if (!player.active) return
+      state.rolling = true
+      const total = randomDie()
+      await animateDiceRoll(total)
+      addLog(player.name, `掷出 ${total}，前进 ${total} 格。`)
+      await moveSteps(player, total, true)
+      if (!state.gameOver && player.active) await resolveLanding(player, true, 0)
+      if (!state.gameOver) endTurn()
+    }
+
+    function randomDie() { return Math.floor(Math.random() * 6) + 1 }
+    function delay(ms) { return new Promise((resolve) => window.setTimeout(resolve, ms)) }
+
+    function animateDiceRoll(finalValue) {
+      return new Promise((resolve) => {
+        const startedAt = Date.now()
+        state.diceAnimating = true
+        state.dice = [randomDie()]
+        render()
+        const timer = window.setInterval(() => {
+          state.dice = [randomDie()]
+          renderCenter()
+          if (Date.now() - startedAt >= 720) {
+            window.clearInterval(timer)
+            state.dice = [finalValue]
+            state.diceAnimating = false
+            render()
+            resolve()
+          }
+        }, 70)
+      })
+    }
+
+    async function moveSteps(player, steps, collectStart) {
+      const direction = steps >= 0 ? 1 : -1
+      for (let count = 0; count < Math.abs(steps); count += 1) {
+        player.position = (player.position + direction + spaces.length) % spaces.length
+        if (direction > 0 && player.position === 0 && collectStart) {
+          player.cash += 200
+          addLog(player.name, '经过或到达起点，获得 200 元。')
+        }
+        render()
+        await delay(130)
+      }
+    }
+
+    async function resolveLanding(player, withQuiz, depth) {
+      if (state.gameOver || !player.active) return
+      const space = spaces[player.position]
+      if (withQuiz && ['property', 'tax', 'chance', 'fate'].includes(space.type)) {
+        const correct = await knowledgeChallenge(player)
+        if (correct) {
+          player.cash += 30
+          addLog(player.name, '知识问答正确，获得 30 元奖励。')
+          render()
+        } else {
+          addLog(player.name, '知识问答未答对，本次没有知识奖励。')
+        }
+      }
+
+      if (space.type === 'property') await resolveProperty(player, player.position)
+      else if (space.type === 'tax') payBank(player, space.amount, `缴纳税款 ${space.amount} 元`)
+      else if (space.type === 'chance') await drawCard(player, chanceCards, '机会卡', depth)
+      else if (space.type === 'fate') await drawCard(player, fateCards, '命运卡', depth)
+      else if (space.type === 'jail') addLog(player.name, '来到探视 / 监狱格，本格不影响行动。')
+      else if (space.type === 'start') addLog(player.name, '停在起点，整顿资产后继续前进。')
+      else if (space.type === 'gotoStart') {
+        addLog(player.name, '进入“回到起点”格。')
+        await moveSteps(player, 1, true)
+      }
+      render()
+    }
+
+    async function knowledgeChallenge(player) {
+      const questions = pack.questions.length ? pack.questions : fallbackQuestions
+      const question = questions[state.quizCursor % questions.length]
+      state.quizCursor += 1
+      const startedAt = Date.now()
+      const answer = await showDialog({
+        eyebrow: `知识问答 · ${question.topic || '素材知识点'}`,
+        title: question.prompt,
+        body: `${player.name} 完成作答后才会继续处理当前格效果。`,
+        options: question.options.map((option) => ({ value: option, label: option })),
+      })
+
+      let result
+      if (question.id && pack.id) {
+        try {
+          const token = localStorage.getItem('zhiyan_token') || ''
+          const response = await fetch('/api/games/monopoly/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            body: JSON.stringify({
+              question_id: question.id,
+              pack_id: pack.id,
+              answer,
+              duration: Math.max(1, Math.floor((Date.now() - startedAt) / 1000)),
+            }),
+          })
+          const body = await response.json()
+          if (!response.ok) throw new Error(body.detail || '知识问答判定失败')
+          result = body
+        } catch (error) {
+          await showDialog({ eyebrow: '问答服务异常', title: '本题未能完成判定', body: error.message, actions: [{ value: 'continue', label: '继续游戏', primary: true }] })
+          return false
+        }
+      } else {
+        result = { correct: answer === question.answer, answer: question.answer, explanation: '本题来自内置离线知识题组。' }
+      }
+
+      await showDialog({
+        eyebrow: result.correct ? '回答正确 · +30 元' : '回答错误',
+        title: result.correct ? '知识判断正确' : `正确答案：${result.answer}`,
+        body: result.explanation || '继续处理当前落地格效果。',
+        actions: [{ value: 'continue', label: '继续', primary: true }],
+      })
+      return Boolean(result.correct)
+    }
+
+    async function resolveProperty(player, spaceIndex) {
+      const space = spaces[spaceIndex]
+      const ownerId = state.owners[spaceIndex]
+      if (ownerId === null) {
+        if (player.cash < space.price) {
+          addLog(player.name, `现金不足，无法购买 ${space.name}（售价 ${space.price} 元）。`)
+          return
+        }
+        const choice = await showDialog({
+          eyebrow: `${GROUPS[space.group].name}地产`,
+          title: `购买 ${space.name}？`,
+          body: `售价 ${space.price} 元，基础租金 ${space.rent} 元。\n集齐同色组后，该组租金翻倍。`,
+          actions: [
+            { value: 'skip', label: '暂不购买' },
+            { value: 'buy', label: `支付 ${space.price} 元`, primary: true },
+          ],
+        })
+        if (choice === 'buy') {
+          player.cash -= space.price
+          state.owners[spaceIndex] = player.id
+          addLog(player.name, `购买 ${space.name}，支付 ${space.price} 元。`)
+          if (state.players.length === 1 && state.owners.filter((ownerId) => ownerId === player.id).length === propertySpaces.length) {
+            finishGame(player, true)
+          }
+        } else {
+          addLog(player.name, `放弃购买 ${space.name}。`)
+        }
+        return
+      }
+      if (ownerId === player.id || !state.players[ownerId].active) {
+        addLog(player.name, ownerId === player.id ? `回到自己的地产 ${space.name}。` : `${space.name} 当前无有效所有者。`)
+        return
+      }
+      const owner = state.players[ownerId]
+      const rent = effectiveRent(space, ownerId)
+      const paid = Math.min(player.cash, rent)
+      player.cash -= rent
+      owner.cash += paid
+      addLog(player.name, `向 ${owner.name} 支付 ${space.name} 租金 ${rent} 元${rent > space.rent ? '（同色组翻倍）' : ''}。`)
+      if (player.cash < 0) bankrupt(player, `无力支付 ${rent} 元租金`)
+    }
+
+    function effectiveRent(space, ownerId) {
+      const groupIndexes = spaces.map((item, index) => ({ item, index })).filter(({ item }) => item.type === 'property' && item.group === space.group)
+      const monopoly = groupIndexes.every(({ index }) => state.owners[index] === ownerId)
+      return space.rent * (monopoly ? 2 : 1)
+    }
+
+    function payBank(player, amount, reason) {
+      player.cash -= amount
+      addLog(player.name, `${reason}。`)
+      if (player.cash < 0) bankrupt(player, `无力支付 ${amount} 元`)
+    }
+
+    async function drawCard(player, deck, title, depth) {
+      const card = deck[Math.floor(Math.random() * deck.length)]
+      addLog(player.name, `${title}：${card.text}`)
+      await showDialog({ eyebrow: title, title: card.text, body: '卡片效果将在本回合立即执行。', actions: [{ value: 'apply', label: '执行卡片', primary: true }] })
+      await applyCard(player, card, depth)
+    }
+
+    async function applyCard(player, card, depth) {
+      if (!player.active || state.gameOver) return
+      if (card.type === 'money') {
+        player.cash += card.amount
+        if (player.cash < 0) bankrupt(player, '无力支付卡片费用')
+      } else if (card.type === 'move') {
+        await moveTo(player, card.target, true)
+        if (depth < 3) await resolveLanding(player, false, depth + 1)
+      } else if (card.type === 'relative') {
+        await moveSteps(player, card.steps, card.steps > 0)
+        if (depth < 3) await resolveLanding(player, false, depth + 1)
+      } else if (card.type === 'jail') {
+        await moveTo(player, 10, false)
+        addLog(player.name, '已到达探视 / 监狱格，不影响下一回合。')
+      } else if (card.type === 'repairs') {
+        const count = state.owners.filter((ownerId) => ownerId === player.id).length
+        payBank(player, count * card.amount, `为 ${count} 块地产支付维护费 ${count * card.amount} 元`)
+      } else if (card.type === 'payEach') {
+        for (const other of state.players.filter((item) => item.active && item.id !== player.id)) {
+          const paid = Math.min(player.cash, card.amount)
+          player.cash -= card.amount
+          other.cash += paid
+          if (player.cash < 0) { bankrupt(player, '无力支付多人协作费'); break }
+        }
+      } else if (card.type === 'collectEach') {
+        for (const other of state.players.filter((item) => item.active && item.id !== player.id)) {
+          const paid = Math.min(other.cash, card.amount)
+          other.cash -= card.amount
+          player.cash += paid
+          if (other.cash < 0) bankrupt(other, '无力支付咨询费')
+          if (state.gameOver) break
+        }
+      }
+      render()
+    }
+
+    async function moveTo(player, target, collectStart) {
+      const steps = (target - player.position + spaces.length) % spaces.length
+      if (steps) await moveSteps(player, steps, collectStart)
+    }
+
+    function bankrupt(player, reason) {
+      if (!player.active) return
+      player.cash = 0
+      player.active = false
+      state.owners = state.owners.map((ownerId) => ownerId === player.id ? null : ownerId)
+      addLog(player.name, `${reason}，玩家破产出局，全部地产归还银行。`)
+      const survivors = state.players.filter((item) => item.active)
+      if (survivors.length === 0) finishSoloFailure(player)
+      else if (state.players.length > 1 && survivors.length === 1) finishGame(survivors[0], false)
+    }
+
+    function endTurn() {
+      if (state.gameOver) return
+      let next = state.current
+      do { next = (next + 1) % state.players.length } while (!state.players[next].active)
+      state.current = next
+      state.turn += 1
+      state.rolling = false
+      render()
+    }
+
+    function finishGame(winner, solo) {
+      state.gameOver = true
+      state.rolling = false
+      render()
+      showDialog({
+        eyebrow: 'GAME COMPLETE',
+        title: solo ? `${winner.name} 完成单人挑战！` : `${winner.name} 获得胜利！`,
+        body: `最终现金 ${winner.cash} 元，持有地产 ${state.owners.filter((ownerId) => ownerId === winner.id).length} 块。`,
+        actions: [{ value: 'restart', label: '重新开始', primary: true }],
+      }).then(() => renderSetup())
+    }
+
+    function finishSoloFailure(player) {
+      state.gameOver = true
+      state.rolling = false
+      render()
+      showDialog({
+        eyebrow: 'SOLO CHALLENGE OVER',
+        title: `${player.name} 的单人挑战结束`,
+        body: '现金不足且已经破产，所有地产已归还银行。',
+        actions: [{ value: 'restart', label: '重新开始', primary: true }],
+      }).then(() => renderSetup())
+    }
+
+    async function confirmRestart() {
+      if (state.rolling) return
+      const choice = await showDialog({
+        eyebrow: '重新开始',
+        title: '确定结束当前对局？',
+        body: '所有玩家现金、位置和地产归属都会重置。',
+        actions: [{ value: 'cancel', label: '继续本局' }, { value: 'restart', label: '重新开始', primary: true }],
+      })
+      if (choice === 'restart') renderSetup()
+    }
+
+    function showDialog({ eyebrow = '', title, body = '', options = [], actions = [] }) {
+      if (dialogResolver) dialogResolver('cancelled')
+      modalEyebrow.textContent = eyebrow
+      modalTitle.textContent = title
+      modalBody.textContent = body
+      modalOptions.replaceChildren()
+      modalActions.replaceChildren()
+      modalBackdrop.hidden = false
+
+      return new Promise((resolve) => {
+        dialogResolver = resolve
+        const finish = (value) => {
+          dialogResolver = null
+          modalBackdrop.hidden = true
+          resolve(value)
+        }
+        options.forEach((option) => {
+          const button = document.createElement('button')
+          button.textContent = option.label
+          button.addEventListener('click', () => finish(option.value))
+          modalOptions.appendChild(button)
+        })
+        actions.forEach((action) => {
+          const button = document.createElement('button')
+          button.className = `button${action.primary ? ' primary' : ''}${action.danger ? ' danger' : ''}`
+          button.textContent = action.label
+          button.addEventListener('click', () => finish(action.value))
+          modalActions.appendChild(button)
+        })
+      })
+    }
+  </script>
+</body>
+</html>

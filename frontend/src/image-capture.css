@@ -1,0 +1,198 @@
+.image-capture-form {
+  padding-top: 2px;
+}
+
+.image-dropzone {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  border: 1px dashed #94acbb;
+  border-radius: 8px;
+  background: var(--low);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color .18s, background .18s;
+}
+
+.image-dropzone:hover,
+.image-dropzone:focus-within {
+  border-color: var(--cyan);
+  background: var(--high);
+}
+
+.image-dropzone > svg {
+  width: 42px;
+  height: 42px;
+  color: var(--blue);
+  stroke-width: 1.6;
+}
+
+.image-dropzone strong {
+  font-size: 17px;
+}
+
+.image-dropzone small {
+  color: var(--muted);
+}
+
+.image-source-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-top: 1px solid var(--outline);
+  border-bottom: 1px solid var(--outline);
+}
+
+.image-source-row > svg {
+  width: 23px;
+  color: var(--blue);
+}
+
+.image-source-row strong,
+.image-source-row small {
+  display: block;
+}
+
+.image-source-row strong {
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-source-row small {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.image-ocr-layout {
+  height: clamp(300px, 40vh, 430px);
+  display: grid;
+  grid-template-columns: minmax(220px, .8fr) minmax(0, 1.2fr);
+  border-top: 1px solid var(--outline);
+  border-bottom: 1px solid var(--outline);
+}
+
+.image-ocr-layout figure {
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 16px 18px 16px 0;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--outline);
+  background-image:
+    linear-gradient(45deg, var(--high) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--high) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--high) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--high) 75%);
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-size: 16px 16px;
+}
+
+.image-ocr-layout figure img {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  object-fit: contain;
+  box-shadow: 0 8px 22px rgba(32, 68, 91, .13);
+}
+
+.image-ocr-layout > label {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 48px minmax(0, 1fr);
+  padding-left: 18px;
+}
+
+.image-ocr-layout > label > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.image-ocr-layout > label > span svg {
+  width: 18px;
+  color: var(--cyan);
+}
+
+.image-ocr-layout > label > span small {
+  margin-left: auto;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.image-ocr-layout textarea {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 13px;
+  resize: none;
+  border: 1px solid var(--outline);
+  border-radius: 6px;
+  outline: 0;
+  background: var(--low);
+  color: var(--text);
+  line-height: 1.75;
+}
+
+.image-ocr-layout textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 14%, transparent);
+}
+
+.material-image-preview {
+  min-height: 180px;
+  max-height: 380px;
+  margin-bottom: 18px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-top: 1px solid var(--outline);
+  border-bottom: 1px solid var(--outline);
+  background: var(--low);
+}
+
+.material-image-preview img {
+  max-width: 100%;
+  max-height: 380px;
+  display: block;
+  object-fit: contain;
+}
+
+.material-image-preview .url-spinner {
+  width: 42px;
+  height: 42px;
+}
+
+@media (max-width: 640px) {
+  .image-dropzone {
+    min-height: 250px;
+  }
+
+  .image-ocr-layout {
+    height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .image-ocr-layout figure {
+    height: 230px;
+    padding: 14px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--outline);
+  }
+
+  .image-ocr-layout > label {
+    height: 300px;
+    padding: 0;
+  }
+}
