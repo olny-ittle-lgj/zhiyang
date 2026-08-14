@@ -109,28 +109,37 @@ const graphModel = computed(() => {
     })
   })
   const byId = new Map(layoutNodes.map((node) => [node.id, node]))
+  const seenPairs = new Map()
+  edges.forEach((edge) => {
+    const source = byId.get(String(edge.source))
+    const target = byId.get(String(edge.target))
+    if (!source || !target) return
+    if (source.id === target.id) return
+    const weight = Number(edge.weight || 0)
+    if (weight <= 0) return
+    const pairKey = source.id < target.id ? `${source.id}|${target.id}` : `${target.id}|${source.id}`
+    const existing = seenPairs.get(pairKey)
+    if (existing && existing.weight >= weight) return
+    const dx = target.x - source.x
+    const dy = target.y - source.y
+    const length = Math.sqrt(dx * dx + dy * dy)
+    if (length < 0.5) return
+    const angle = Math.atan2(dy, dx) * 180 / Math.PI
+    const active = !pathMode.value || !selected.value || source.id === String(selected.value.id) || target.id === String(selected.value.id)
+    seenPairs.set(pairKey, {
+      id: `${source.id}-${target.id}`,
+      source,
+      target,
+      weight,
+      active,
+      length,
+      angle,
+      z: (source.z + target.z) / 2,
+    })
+  })
   return {
     nodes: layoutNodes,
-    edges: edges.map((edge) => {
-      const source = byId.get(String(edge.source))
-      const target = byId.get(String(edge.target))
-      if (!source || !target) return null
-      const active = !pathMode.value || !selected.value || source.id === String(selected.value.id) || target.id === String(selected.value.id)
-      const dx = target.x - source.x
-      const dy = target.y - source.y
-      const length = Math.sqrt(dx * dx + dy * dy)
-      const angle = Math.atan2(dy, dx) * 180 / Math.PI
-      return {
-        id: `${source.id}-${target.id}`,
-        source,
-        target,
-        weight: Number(edge.weight || 0),
-        active,
-        length,
-        angle,
-        z: (source.z + target.z) / 2,
-      }
-    }).filter(Boolean),
+    edges: Array.from(seenPairs.values()),
     layers: [
       { id: 'weak', label: '待复习层', z: -260, y: 62 },
       { id: 'steady', label: '巩固层', z: 0, y: 52 },

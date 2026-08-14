@@ -16,6 +16,7 @@ from xml.sax.saxutils import escape
 
 import jwt
 import httpx
+import os
 from fastapi import (
     APIRouter,
     BackgroundTasks,
@@ -73,6 +74,12 @@ from .schemas import (
     TeamUpdateRequest,
 )
 from .services import rabbitmq_publish
+from .standard_evolution import EvolutionAgentError, run_evolution_agents
+
+# Agent-based evolution (enabled via AGENT_EVOLUTION env var)
+_agent_evolution = os.getenv("AGENT_EVOLUTION", "true").lower() not in ("0", "false", "no")
+if _agent_evolution:
+    from .agent_langgraph import langgraph_run_evolution as agent_run_evolution
 
 
 router = APIRouter(prefix="/api/teams", tags=["teams"])
@@ -2332,13 +2339,22 @@ async def _run_team_auto_evolution(team_id: int, task_id: int, lib_id: int | Non
     errors: list[str] = []
     for material in materials:
         try:
-            evolved_content, reason = await run_evolution_agents(
-                material=material,
-                api_key=api_key,
-                base_url=base_url,
-                model=model,
-                proxy_url=proxy_url,
-            )
+            if _agent_evolution:
+                evolved_content, reason = await agent_run_evolution(
+                    material=material,
+                    api_key=api_key,
+                    base_url=base_url,
+                    model=model,
+                    proxy_url=proxy_url,
+                )
+            else:
+                evolved_content, reason = await run_evolution_agents(
+                    material=material,
+                    api_key=api_key,
+                    base_url=base_url,
+                    model=model,
+                    proxy_url=proxy_url,
+                )
             with _conn() as conn:
                 ver = conn.execute("SELECT COALESCE(MAX(version),0)+1 value FROM team_material_versions WHERE material_id=?", (material["id"],)).fetchone()
                 version_num = ver["value"] if ver else 1

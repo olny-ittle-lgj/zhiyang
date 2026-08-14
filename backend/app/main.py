@@ -42,6 +42,28 @@ from .embeddings import StandardRuntimeError
 from .material_qa_agent import MaterialQaAgentError, answer_material_question
 from .standard_evolution import EvolutionAgentError, run_evolution_agents
 from .standard_game_agent import GAME_TITLES, agent_extract_knowledge, build_game_questions, index_matching_points, matching_round
+
+# ---- Agent-based alternatives (enabled via AGENT_* env vars) ----
+_agent_mode = {
+    "material_qa": os.getenv("AGENT_MATERIAL_QA", "true").lower() not in ("0", "false", "no"),
+    "customer_service": os.getenv("AGENT_CUSTOMER_SERVICE", "true").lower() not in ("0", "false", "no"),
+    "game": os.getenv("AGENT_GAME_GENERATION", "true").lower() not in ("0", "false", "no"),
+    "evolution": os.getenv("AGENT_EVOLUTION", "true").lower() not in ("0", "false", "no"),
+}
+
+# ---- LangGraph Agent imports (all modules use langgraph backend) ----
+if _agent_mode["material_qa"]:
+    from .agent_langgraph import langgraph_answer_material_question as agent_answer_material_question
+
+if _agent_mode["customer_service"]:
+    from .agent_langgraph import langgraph_answer_customer_service as agent_answer_customer_service
+    from .agent_langgraph import langgraph_stream_customer_service as agent_stream_customer_service
+
+if _agent_mode["game"]:
+    from .agent_langgraph import langgraph_generate_game as agent_generate_game
+
+if _agent_mode["evolution"]:
+    from .agent_langgraph import langgraph_run_evolution as agent_run_evolution
 from .mcp_client import FetchMcpError, FetchMcpNotConfigured, fetch_url_content
 from .ocr import OcrError, extract_image_text, inspect_image
 from .video import VideoAnalysisError, analyze_video_text
@@ -1299,14 +1321,24 @@ async def ask_material(material_id: int, payload: MaterialAskRequest, user: Curr
         reference_id=str(material_id),
     )
     try:
-        result = await answer_material_question(
-            material,
-            question,
-            api_key=settings.deepseek_api_key,
-            base_url=settings.deepseek_base_url,
-            model=settings.deepseek_model,
-            proxy_url=settings.deepseek_proxy_url,
-        )
+        if _agent_mode["material_qa"]:
+            result = await agent_answer_material_question(
+                material,
+                question,
+                api_key=settings.deepseek_api_key,
+                base_url=settings.deepseek_base_url,
+                model=settings.deepseek_model,
+                proxy_url=settings.deepseek_proxy_url,
+            )
+        else:
+            result = await answer_material_question(
+                material,
+                question,
+                api_key=settings.deepseek_api_key,
+                base_url=settings.deepseek_base_url,
+                model=settings.deepseek_model,
+                proxy_url=settings.deepseek_proxy_url,
+            )
     except MaterialQaAgentError as exc:
         if quota.get("charged"):
             credit_personal(
@@ -1405,14 +1437,24 @@ async def customer_service_ask(payload: CustomerServiceAskRequest, user: Current
     if not question:
         raise HTTPException(422, "问题不能为空")
     try:
-        result = await answer_customer_service_agent(
-            question,
-            [item.model_dump() for item in payload.history],
-            api_key=settings.deepseek_api_key,
-            base_url=settings.deepseek_base_url,
-            model=settings.deepseek_model,
-            proxy_url=settings.deepseek_proxy_url,
-        )
+        if _agent_mode["customer_service"]:
+            result = await agent_answer_customer_service(
+                question,
+                [item.model_dump() for item in payload.history],
+                api_key=settings.deepseek_api_key,
+                base_url=settings.deepseek_base_url,
+                model=settings.deepseek_model,
+                proxy_url=settings.deepseek_proxy_url,
+            )
+        else:
+            result = await answer_customer_service_agent(
+                question,
+                [item.model_dump() for item in payload.history],
+                api_key=settings.deepseek_api_key,
+                base_url=settings.deepseek_base_url,
+                model=settings.deepseek_model,
+                proxy_url=settings.deepseek_proxy_url,
+            )
     except CustomerServiceAgentError as exc:
         raise HTTPException(503, str(exc)) from exc
     log_event(user["id"], "customer_service", "ask", question[:160])
@@ -1427,17 +1469,30 @@ async def customer_service_ask_stream(payload: CustomerServiceAskRequest, user: 
 
     async def event_stream():
         try:
-            async for event in stream_customer_service_agent(
-                question,
-                [item.model_dump() for item in payload.history],
-                api_key=settings.deepseek_api_key,
-                base_url=settings.deepseek_base_url,
-                model=settings.deepseek_model,
-                proxy_url=settings.deepseek_proxy_url,
-            ):
-                if event.get("type") == "done":
-                    log_event(user["id"], "customer_service", "ask", question[:160])
-                yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+            if _agent_mode["customer_service"]:
+                async for event in agent_stream_customer_service(
+                    question,
+                    [item.model_dump() for item in payload.history],
+                    api_key=settings.deepseek_api_key,
+                    base_url=settings.deepseek_base_url,
+                    model=settings.deepseek_model,
+                    proxy_url=settings.deepseek_proxy_url,
+                ):
+                    if isinstance(event, dict) and event.get("type") == "done":
+                        log_event(user["id"], "customer_service", "ask", question[:160])
+                    yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+            else:
+                async for event in stream_customer_service_agent(
+                    question,
+                    [item.model_dump() for item in payload.history],
+                    api_key=settings.deepseek_api_key,
+                    base_url=settings.deepseek_base_url,
+                    model=settings.deepseek_model,
+                    proxy_url=settings.deepseek_proxy_url,
+                ):
+                    if event.get("type") == "done":
+                        log_event(user["id"], "customer_service", "ask", question[:160])
+                    yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
         except CustomerServiceAgentError as exc:
             error_event = {"type": "error", "message": str(exc)}
             yield f"data: {json.dumps(error_event, ensure_ascii=False)}\n\n"
@@ -1584,6 +1639,14 @@ async def ai_chat(payload: ChatRequest, user: CurrentUser) -> dict:
 
 
 async def _generate_evolution_proposal(material: dict) -> tuple[str, str]:
+    if _agent_mode["evolution"]:
+        return await agent_run_evolution(
+            material,
+            api_key=settings.deepseek_api_key,
+            base_url=settings.deepseek_base_url,
+            model=settings.deepseek_model,
+            proxy_url=settings.deepseek_proxy_url,
+        )
     return await run_evolution_agents(
         material,
         api_key=settings.deepseek_api_key,
@@ -2349,14 +2412,25 @@ async def generate_game_pack(payload: GameGenerateRequest, user: CurrentUser) ->
         raise HTTPException(422, f"以下文件没有可生成题目的正文：{'、'.join(invalid)}")
 
     try:
-        points, source_mode, agent_note = await agent_extract_knowledge(
-            materials,
-            api_key=settings.deepseek_api_key,
-            base_url=settings.deepseek_base_url,
-            model=settings.deepseek_model,
-            proxy_url=settings.deepseek_proxy_url,
-            requested_count=18 if payload.game == "flashcard" else 10,
-        )
+        if _agent_mode["game"]:
+            points, source_mode, agent_note = await agent_generate_game(
+                materials,
+                payload.game,
+                payload.difficulty,
+                api_key=settings.deepseek_api_key,
+                base_url=settings.deepseek_base_url,
+                model=settings.deepseek_model,
+                proxy_url=settings.deepseek_proxy_url,
+            )
+        else:
+            points, source_mode, agent_note = await agent_extract_knowledge(
+                materials,
+                api_key=settings.deepseek_api_key,
+                base_url=settings.deepseek_base_url,
+                model=settings.deepseek_model,
+                proxy_url=settings.deepseek_proxy_url,
+                requested_count=18 if payload.game == "flashcard" else 10,
+            )
         generated = build_game_questions(payload.game, payload.difficulty, points)
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc
