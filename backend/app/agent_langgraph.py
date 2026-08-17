@@ -1,10 +1,8 @@
 """
 LangGraph-based Agent implementations — ReAct agents for all modules.
 
-Use langgraph.prebuilt.create_react_agent + langchain_deepseek.ChatDeepSeek
-to replace the self-built AgentRuntime ReAct loop.
-
-Switch via env: AGENT_BACKEND=langgraph
+Use langchain.agents.create_agent + langchain_deepseek.ChatDeepSeek
+to implement ReAct agent loops for all four business modules.
 
 Implemented:
   - material_qa:   langgraph_answer_material_question()
@@ -21,9 +19,9 @@ import re
 from difflib import SequenceMatcher
 from typing import Any, AsyncIterator, Iterable
 
+from langchain.agents import create_agent
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_core.tools import tool
-from langgraph.prebuilt import create_react_agent
 
 from .material_qa_agent import (
     MaterialQaAgentError,
@@ -48,6 +46,11 @@ from .standard_evolution import (
 # Shared helpers
 # ===========================================================================
 
+# DeepSeek deepseek-chat 单次输出上限为 8192 token（默认 4096），
+# 超过该值 API 会返回 400 Invalid max_tokens value。所有直连调用统一在此收敛。
+_DEEPSEEK_MAX_TOKENS = 8192
+
+
 def _build_chat_deepseek(
     api_key: str,
     base_url: str,
@@ -55,8 +58,15 @@ def _build_chat_deepseek(
     proxy_url: str = "",
     temperature: float = 0.2,
     max_tokens: int = 4096,
+    *,
+    json_mode: bool = False,
 ) -> Any:
-    """Build a ChatDeepSeek instance, optionally with proxy."""
+    """Build a ChatDeepSeek instance, optionally with proxy.
+
+    json_mode=True 时强制模型返回合法 JSON（对应 DeepSeek 的 response_format）。
+    注意：json_mode 与工具调用（function calling）不兼容，仅用于无工具的直连调用。
+    max_tokens 会被收敛到 [_DEEPSEEK_MAX_TOKENS] 上限，避免触发 DeepSeek 400 错误。
+    """
     import httpx
     from langchain_deepseek import ChatDeepSeek
 
@@ -64,12 +74,20 @@ def _build_chat_deepseek(
     if proxy_url:
         http_client_kwargs["proxy"] = proxy_url
 
+    model_kwargs: dict[str, Any] = {}
+    if json_mode:
+        model_kwargs["response_format"] = {"type": "json_object"}
+
+    # 收敛到 DeepSeek 允许的输出范围 [1, 8192]
+    max_tokens = max(1, min(int(max_tokens), _DEEPSEEK_MAX_TOKENS))
+
     return ChatDeepSeek(
         model=model,
         api_key=api_key,
         api_base=base_url,
         temperature=temperature,
         max_tokens=max_tokens,
+        model_kwargs=model_kwargs,
         http_client=httpx.Client(**http_client_kwargs),
     )
 
@@ -165,12 +183,11 @@ async def langgraph_answer_material_question(
     )
 
     llm = _build_chat_deepseek(api_key, base_url, model, proxy_url, temperature=0.2, max_tokens=1500)
-    agent = create_react_agent(llm, tools)
+    agent = create_agent(llm, tools, system_prompt=system_prompt)
 
     try:
         result = await agent.ainvoke({
             "messages": [
-                SystemMessage(content=system_prompt),
                 HumanMessage(content=f"用户问题：{question}\n\n请根据素材内容回答。如果不确定，请先使用 search_material 工具搜索原文。"),
             ],
         })
@@ -300,12 +317,11 @@ async def langgraph_answer_customer_service(
     )
 
     llm = _build_chat_deepseek(api_key, base_url, model, proxy_url, temperature=0.25, max_tokens=1400)
-    agent = create_react_agent(llm, tools)
+    agent = create_agent(llm, tools, system_prompt=system_prompt)
 
     try:
         result = await agent.ainvoke({
             "messages": [
-                SystemMessage(content=system_prompt),
                 HumanMessage(content=f"用户问题：{question}\n\n请根据平台帮助文档回答。如果不确定，请使用 search_knowledge_base 工具检索。"),
             ],
         })
@@ -409,39 +425,34 @@ async def langgraph_stream_customer_service(
     )
 
     llm = _build_chat_deepseek(api_key, base_url, model, proxy_url, temperature=0.25, max_tokens=1400)
-    agent = create_react_agent(llm, tools)
+    agent = create_agent(llm, tools, system_prompt=system_prompt)
 
     full_answer = ""
     tool_steps: list[dict[str, Any]] = []
 
     try:
-        async for event in agent.astream_events(
+        async for msg, metadata in agent.astream(
             {
                 "messages": [
-                    SystemMessage(content=system_prompt),
                     HumanMessage(content=f"用户问题：{question}\n\n请根据平台帮助文档回答。如果不确定，请使用 search_knowledge_base 工具检索。"),
                 ],
             },
-            version="v2",
+            stream_mode="messages",
         ):
-            kind = event.get("event", "")
+            # Track tool calls from AIMessageChunks with tool_calls
+            if isinstance(msg, AIMessage) and msg.tool_calls:
+                for tc in msg.tool_calls:
+                    tool_steps.append({
+                        "tool": tc.get("name", ""),
+                        "input": str(tc.get("args", ""))[:200],
+                    })
 
-            # Track tool calls
-            if kind == "on_tool_start":
-                tool_steps.append({
-                    "tool": event.get("name", ""),
-                    "input": str(event.get("data", {}).get("input", ""))[:200],
-                })
-
-            # Stream token-level output from the chat model (only final answer, not tool-call tokens)
-            if kind == "on_chat_model_stream":
-                chunk = event.get("data", {}).get("chunk")
-                if chunk and hasattr(chunk, "content") and chunk.content:
-                    # Skip content that looks like tool calls (shouldn't happen with stream but safety)
-                    if not (hasattr(chunk, "tool_calls") and chunk.tool_calls):
-                        token = str(chunk.content)
-                        full_answer += token
-                        yield {"type": "delta", "content": token}
+            # Stream token-level content from AIMessageChunks without tool_calls
+            if isinstance(msg, AIMessage) and msg.content:
+                content = str(msg.content)
+                if content and not msg.tool_calls:
+                    full_answer += content
+                    yield {"type": "delta", "content": content}
 
         if not full_answer.strip():
             raise CustomerServiceAgentError("客服 Agent 返回了空答案")
@@ -490,34 +501,53 @@ def _parse_agent_questions(raw: str) -> list[dict[str, Any]]:
     if match:
         text = match.group(1).strip()
 
-    # Strategy 2: Find the outermost JSON object or array
-    for start_char, end_char in [("{", "}"), ("[", "]")]:
-        start = text.find(start_char)
-        if start >= 0:
-            depth = 0
-            for i in range(start, len(text)):
-                if text[i] in "{[":
-                    depth += 1
-                elif text[i] in "}]":
-                    depth -= 1
-                if depth == 0:
-                    text = text[start:i + 1]
-                    break
-
-    try:
-        data = json.loads(text)
-        if isinstance(data, dict):
-            questions = data.get("questions", [])
-            if isinstance(questions, list):
-                return questions
-            for key in ("questions", "data", "items", "results"):
-                val = data.get(key)
-                if isinstance(val, list):
-                    return val
-        if isinstance(data, list):
-            return data
-    except (json.JSONDecodeError, TypeError):
-        pass
+    # Strategy 2: Try parse JSON directly, then with bracket extraction
+    for attempt in range(2):
+        if attempt == 0:
+            # First try: parse the text as-is (after code fence extraction)
+            try:
+                data = json.loads(text)
+                if isinstance(data, dict):
+                    questions = data.get("questions")
+                    if isinstance(questions, list) and questions:
+                        return questions
+                    for key in ("data", "items", "results"):
+                        val = data.get(key)
+                        if isinstance(val, list) and val:
+                            return val
+                if isinstance(data, list):
+                    return data
+            except (json.JSONDecodeError, TypeError):
+                pass
+        else:
+            # Second try: extract JSON via bracket matching
+            trimmed = text
+            for start_char, end_char in [("{", "}"), ("[", "]")]:
+                start = trimmed.find(start_char)
+                if start >= 0:
+                    depth = 0
+                    for i in range(start, len(trimmed)):
+                        if trimmed[i] in "{[":
+                            depth += 1
+                        elif trimmed[i] in "}]":
+                            depth -= 1
+                        if depth == 0:
+                            trimmed = trimmed[start:i + 1]
+                            break
+            try:
+                data = json.loads(trimmed)
+                if isinstance(data, dict):
+                    questions = data.get("questions")
+                    if isinstance(questions, list) and questions:
+                        return questions
+                    for key in ("data", "items", "results"):
+                        val = data.get(key)
+                        if isinstance(val, list) and val:
+                            return val
+                if isinstance(data, list):
+                    return data
+            except (json.JSONDecodeError, TypeError):
+                pass
 
     # Strategy 3: Try to find questions array anywhere in the text
     for pattern in [
@@ -724,18 +754,18 @@ async def langgraph_generate_game(
         "explanation（解释）、topic（知识点主题）、question_type（multiple-choice 或 concept-definition）\n"
         "- 选项要包含 1 个正确答案和 3 个干扰项\n"
         "- 干扰项要似是而非，与正确答案属同一领域\n"
-        "- 题目要覆盖多个素材，不要集中在一个素材上\n\n"
+        "- 题目要覆盖多个素材，不要集中在一个素材上\n"
+        "- 每道题的 explanation 控制在 40 字以内，避免整体输出过长被截断\n\n"
         "最终输出格式：将完整的题目列表以 JSON 格式输出，"
         "格式为 {{\"questions\": [题目列表]}}"
     )
 
     llm = _build_chat_deepseek(api_key, base_url, model, proxy_url, temperature=0.3, max_tokens=16000)
-    agent = create_react_agent(llm, tools)
+    agent = create_agent(llm, tools, system_prompt=system_prompt)
 
     try:
         result = await agent.ainvoke({
             "messages": [
-                SystemMessage(content=system_prompt),
                 HumanMessage(content=(
                     f"请从以下素材中为「{game_title}」生成 {difficulty} 难度题目。\n"
                     f"素材数量：{len(materials)} 个\n"
@@ -800,11 +830,12 @@ async def _analyze_material_langgraph(
 ) -> dict[str, Any]:
     """Analyze material to extract key points, gaps, terms, and quality issues.
     Uses ChatDeepSeek directly instead of nested AgentRuntime."""
-    llm = _build_chat_deepseek(api_key, base_url, model, proxy_url, temperature=0.1, max_tokens=4096)
+    llm = _build_chat_deepseek(api_key, base_url, model, proxy_url, temperature=0.1, max_tokens=4096, json_mode=True)
 
     system = (
         "你是知识分析 Agent。只依据原文提取主题、摘要、核心知识点、知识缺口、术语和质量问题。"
         "只返回 JSON object，字段为 topic、summary、key_points、knowledge_gaps、terms、quality_issues。"
+        "summary 控制在 200 字以内，key_points 最多 15 条、terms 最多 20 条，每条 30 字以内，避免输出过长被截断。"
     )
     user = f"素材：{material_name}\n正文：\n{content[:60000]}"
 
@@ -813,10 +844,23 @@ async def _analyze_material_langgraph(
         HumanMessage(content=user),
     ])
 
-    parsed = _parse_json(str(response.content))
-    points = _string_list(parsed.get("key_points"), 30)
+    raw_content = str(response.content)
+    parsed = _parse_json(raw_content)
+    raw_points = parsed.get("key_points") or parsed.get("keypoints") or parsed.get("核心知识点") or []
+    # Handle LLM returning key_points in various formats
+    if isinstance(raw_points, str):
+        # Could be newline-separated or comma-separated
+        raw_points = [p.strip() for p in re.split(r"[\n,;]+", raw_points) if p.strip()]
+    elif isinstance(raw_points, dict):
+        # Could be numbered keys like {"1": "...", "2": "..."}
+        raw_points = [str(v).strip() for v in raw_points.values() if str(v).strip()]
+    elif not isinstance(raw_points, list):
+        raw_points = []
+    points = _string_list(raw_points, 30)
     if not points:
-        raise EvolutionAgentError("知识分析 Agent 未返回 key_points")
+        raise EvolutionAgentError(
+            f"知识分析 Agent 未返回 key_points（原始返回前 300 字：{raw_content[:300]}）"
+        )
 
     return {
         "topic": str(parsed.get("topic", material_name)).strip(),
@@ -839,7 +883,7 @@ async def _expand_knowledge_langgraph(
 ) -> dict[str, Any]:
     """Expand knowledge based on analysis results.
     Uses ChatDeepSeek directly instead of nested AgentRuntime."""
-    llm = _build_chat_deepseek(api_key, base_url, model, proxy_url, temperature=0.3, max_tokens=16384)
+    llm = _build_chat_deepseek(api_key, base_url, model, proxy_url, temperature=0.3, max_tokens=16384, json_mode=True)
 
     system = (
         "你是知识拓展 Agent。基于原文和知识分析结果补充定义、机制、关系、示例、应用、边界和事实谨慎提示。"
@@ -854,6 +898,7 @@ async def _expand_knowledge_langgraph(
         '  "fact_cautions": ["需要特别谨慎陈述的事实点"]\n'
         '}\n'
         "至少 definitions、mechanisms、examples、applications 每个字段都要提供至少 1 条内容。"
+        "每条内容控制在 60 字以内，每个字段最多 8 条，避免输出过长被截断。"
     )
     user = f"分析：{analysis_json}\n原文：\n{original_content[:40000]}"
 
@@ -893,7 +938,7 @@ async def _compose_document_langgraph(
     system = (
         "你是知识编辑 Agent。把原文、分析和拓展资料重构成可独立阅读的完整 Markdown 文档。"
         "必须有主题概述、核心概念、原理或机制、知识关系、示例与应用、边界与注意事项、要点总结。"
-        "不要输出代码围栏或分析过程。"
+        "不要输出代码围栏或分析过程。文档要精炼聚焦核心，总篇幅控制在 5000 字以内，避免冗长。"
     )
     user = (
         f"原文：\n{original_content[:40000]}\n"
@@ -931,11 +976,12 @@ async def _review_document_langgraph(
     )
 
     # AI review
-    llm = _build_chat_deepseek(api_key, base_url, model, proxy_url, temperature=0.1, max_tokens=2400)
+    llm = _build_chat_deepseek(api_key, base_url, model, proxy_url, temperature=0.1, max_tokens=4096, json_mode=True)
 
     system = (
         "你是知识质量审核 Agent。审核进化文档是否覆盖核心知识、是否有实质补充、"
         "是否存在无依据事实、结构是否清晰。只返回 JSON object：passed、score、issues。"
+        "issues 数组最多 3 条，每条不超过 30 字。"
     )
     user = (
         f"核心知识点：{json.dumps(key_points, ensure_ascii=False)}\n"
@@ -985,11 +1031,11 @@ async def langgraph_run_evolution(
     proxy_url_ref = proxy_url
 
     @tool
-    async def analyze(content_arg: str = "") -> str:
+    async def analyze() -> str:
         """分析知识素材，提取主题、摘要、核心知识点（key_points）、知识缺口、
-        术语和质量问题。必须在进化流程开始时首先调用。"""
+        术语和质量问题。必须在进化流程开始时首先调用。无需传入参数，工具会自动使用原始素材。"""
         result = await _analyze_material_langgraph(
-            content_arg or content_ref,
+            content_ref,
             material_name,
             api_key=api_key_ref,
             base_url=base_url_ref,
@@ -1064,12 +1110,11 @@ async def langgraph_run_evolution(
     )
 
     llm = _build_chat_deepseek(api_key, base_url, model, proxy_url, temperature=0.2, max_tokens=16384)
-    agent = create_react_agent(llm, tools)
+    agent = create_agent(llm, tools, system_prompt=system_prompt)
 
     try:
         result = await agent.ainvoke({
             "messages": [
-                SystemMessage(content=system_prompt),
                 HumanMessage(content=(
                     f"请对以下素材执行知识进化：\n"
                     f"素材名称：{material_name}\n"
